@@ -32,8 +32,8 @@ class Group(models.Model):
 
 
 class GiftPair(models.Model):
-    giver = models.ForeignKey(Participant, on_delete=models.CASCADE)
-    receiver = models.ForeignKey(Participant, on_delete=models.CASCADE)
+    giver = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='gifts_given')
+    receiver = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='gifts_received')
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
 

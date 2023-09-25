@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quick game</title>
+</head>
+<body>
+    <h1>Quick secret santa</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Let's play!</button>
+    </form>
+</body>
+</html>

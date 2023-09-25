@@ -16,9 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from secret_santa.views import MainView
+from secret_santa.views import (MainView,
+                                QuickGameView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', MainView.as_view(), name='index'),
+    path('quick-game/', QuickGameView.as_view(), name='quick_game'),
 ]

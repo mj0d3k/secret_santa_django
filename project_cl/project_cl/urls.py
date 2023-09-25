@@ -17,10 +17,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from secret_santa.views import (MainView,
-                                QuickGameView)
+                                QuickGameView,
+                                LoginView,
+                                LogoutView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', MainView.as_view(), name='index'),
     path('quick-game/', QuickGameView.as_view(), name='quick_game'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
 ]

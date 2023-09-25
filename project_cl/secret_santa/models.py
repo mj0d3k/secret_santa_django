@@ -6,7 +6,7 @@ class Event(models.Model):
     name = models.CharField(max_length=64)
     date = models.DateField()
     description = models.TextField()
-    organizer = models.ForeignKey(User, on_delete=models.CASCADE)
+    organizer = models.ForeignKey(User, on_delete=models.CASCADE) # one:many relationship
 
 
 class Participant(models.Model):
@@ -24,16 +24,16 @@ class Gift(models.Model):
 
 class Group(models.Model):
     name = models.CharField(max_length=64)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
-    participants = models.ManyToManyField(Participant)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE) # one:many relationship
+    participants = models.ManyToManyField(Participant) # many:many relationship
     draw_date = models.DateField()
     exchange_date = models.DateField()
     price_range = models.DecimalField(max_digits=6, decimal_places=2)
 
 
 class GiftPair(models.Model):
-    giver = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='gifts_given')
-    receiver = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='gifts_received')
+    giver = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='gifts_given') # many:many relationship
+    receiver = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='gifts_received') # many:many relationship
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
 

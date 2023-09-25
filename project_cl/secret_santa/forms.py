@@ -45,13 +45,10 @@ CURRENCY_CHOICES = [
 
 
 class GameForm(forms.Form):
-    send_date = forms.DateField(
-        label='Date of sending the invitations',
-        widget=forms.DateInput(attrs={'placeholder': 'RRRR-MM-DD'}))
-    num_players = forms.IntegerField(label='Numbers of participants', min_value=3)
-    message = forms.CharField(label='Message', widget=forms.Textarea)
+    #send_date = forms.DateField(
+        #label='Date of sending the invitations',
+        #widget=forms.DateInput(attrs={'placeholder': 'RRRR-MM-DD'}))
+    # num_players = forms.IntegerField(label='Numbers of participants', min_value=3)
+    # message = forms.CharField(label='Message', widget=forms.Textarea)
     max_price = forms.DecimalField(label='Max price', decimal_places=2, min_value=0.01)
     currency = forms.ChoiceField(label='Currency', choices=CURRENCY_CHOICES, widget=forms.Select)
-
-    player_names = forms.CharField(label='Players names', help_text='Please enter player names separated by commas')
-    player_emails = forms.CharField(label='Players emails', help_text='Please enter player emails separated by commas')

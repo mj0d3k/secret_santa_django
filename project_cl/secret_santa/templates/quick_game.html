@@ -8,7 +8,65 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
+
+        <div id="players-fields">
+            <h3>Players</h2>
+            <label for="id_player_name_1">Player 1 Name:</label>
+            <input type="text" name="player_name_1" id="id_player_name_1">
+            <label for="id_player_email_1">Player 1 Email:</label>
+            <input type="email" name="player_email_1" id="id_player_email_1">
+            <label for="id_player_name_2">Player 2 Name:</label>
+            <input type="text" name="player_name_2" id="id_player_name_2">
+            <label for="id_player_email_2">Player 2 Email:</label>
+            <input type="email" name="player_email_2" id="id_player_email_2">
+            <label for="id_player_name_3">Player 3 Name:</label>
+            <input type="text" name="player_name_3" id="id_player_name_3">
+            <label for="id_player_email_3">Player 3 Email:</label>
+            <input type="email" name="player_email_3" id="id_player_email_3">
+        </div>
+        <button id="add-player">Add player</button>
         <button type="submit">Let's play!</button>
     </form>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById("game-form");
+            const playersFields = document.getElementById("players-fields");
+            const addButton = document.getElementById("add-player");
+        
+            let playerCounter = 3;
+            addButton.addEventListener("click", function() {
+                const nameLabel = document.createElement("label");
+                nameLabel.textContent = `Player ${playerCounter + 1} Name:`;
+                const nameInput = document.createElement("input");
+                nameInput.type = "text";
+                nameInput.name = `player_name_${playerCounter + 1}`;
+                playersFields.appendChild(nameLabel);
+                playersFields.appendChild(nameInput);
+        
+                const emailLabel = document.createElement("label");
+                emailLabel.textContent = `Player ${playerCounter + 1} Email:`;
+                const emailInput = document.createElement("input");
+                emailInput.type = "email";
+                emailInput.name = `player_email_${playerCounter + 1}`;
+                playersFields.appendChild(emailLabel);
+                playersFields.appendChild(emailInput);
+        
+                const removeButton = document.createElement("button");
+                removeButton.type = "button";
+                removeButton.textContent = "Remove";
+                removeButton.addEventListener("click", function() {
+                    playersFields.removeChild(nameLabel);
+                    playersFields.removeChild(nameInput);
+                    playersFields.removeChild(emailLabel);
+                    playersFields.removeChild(emailInput);
+                    playersFields.removeChild(removeButton);
+                });
+        
+                playersFields.appendChild(removeButton);
+        
+                playerCounter++;
+            });
+        });
+        </script>
 </body>
 </html>

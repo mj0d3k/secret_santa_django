@@ -2,6 +2,9 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import View
 from .forms import GameForm
+import random
+import smtplib
+from email.mime.text import MIMEText
 
 
 class MainView(View):
@@ -15,7 +18,4 @@ class QuickGameView(View):
         return render(request, 'quick_game.html', {'form': form})
     
     def post(self, request):
-        form = GameForm(request.POST)
-        if form.is_valid():
-            print(form.cleaned_data)
-        return HttpResponse('OK')
+        pass

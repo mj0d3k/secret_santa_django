@@ -18,4 +18,5 @@ class QuickGameView(View):
         return render(request, 'quick_game.html', {'form': form})
     
     def post(self, request):
-        pass
+        return HttpResponse('OK')
+    # moze zrobic tak, że klikniecie przycisku spowoduje przejscie do widoku podsumowujacego, z mozlwoscia edyci, a potem bedzie kod z wysylaniem maili?

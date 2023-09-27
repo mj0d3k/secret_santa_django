@@ -24,6 +24,7 @@
             <label for="id_player_email_3">Player 3 Email:</label>
             <input type="email" name="player_email_3" id="id_player_email_3">
         </div>
+        <input type="hidden" name="num_players" id="num-players" value="3">
         <button type="button" id="add-player">Add player</button>
         <button type="submit">Let's play!</button>
     </form>
@@ -60,11 +61,15 @@
                     playersFields.removeChild(emailLabel);
                     playersFields.removeChild(emailInput);
                     playersFields.removeChild(removeButton);
+
+                    playerCounter--;
+                    numPlayersInput.value = playerCounter;
                 });
         
                 playersFields.appendChild(removeButton);
         
                 playerCounter++;
+                numPlayersInput.value = playerCounter;
             });
         });
     </script>

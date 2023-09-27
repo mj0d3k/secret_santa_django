@@ -48,5 +48,22 @@ class QuickGameView(View):
         return render(request, 'quick_game.html', {'form': form})
 
     def post(self, request):
-        return HttpResponse('OK')
-    # moze zrobic tak, że klikniecie przycisku spowoduje przejscie do widoku podsumowujacego, z mozlwoscia edyci, a potem bedzie kod z wysylaniem maili?
+        form = GameForm()
+        if form.is_valid():
+            max_price = form.cleaned_data['max_price']
+            currency = form.cleaned_data['currency']
+            num_players = int(request.POST.get('num_players', 0))
+            
+        participants = []
+        for i in range(1, num_players + 1):
+            players_name = request.POST.get(f'player_name_{i}')
+            players_email = request.POST.get(f'player_email_{i}')
+            participants.append((players_name, players_email))
+
+        secret_santa(participants, max_price, currency)
+
+        return HttpResponse("success")
+    
+
+def secret_santa(participants, max_price, currency):
+    pass

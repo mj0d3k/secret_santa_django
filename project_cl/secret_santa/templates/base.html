@@ -9,6 +9,7 @@
     <p>User logged: {{ user.username }}</p>
         {% if user.is_authenticated %}
     <a href="/logout/">logout</a>
+    <a href="/change-password/">Change password</a>
         {% else %}
     <a href="/login/">login</a>
         {% endif %}

@@ -7,10 +7,11 @@
 <body>
     <h1>Ho, ho, ho!</h1>
     {% if user.is_authenticated %}
-        <a href="/logged/">My Profile</a>
+        <a href="/logged/"> <button>My Profile</button></a>
+        <a href="/quick-game/"> <button>Quick Game</button></a>
     {% else %}
-        <a href="/quick-game/">Quick Game</a>
-        <a href="/login/">Login / Register</a>
+        <a href="/quick-game/"> <button>Quick Game</button></a>
+        <a href="/login/"> <button>Login / Register</button></a>
     {% endif %}
 </body>
 {% endblock %}

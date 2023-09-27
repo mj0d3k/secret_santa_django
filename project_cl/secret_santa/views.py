@@ -13,8 +13,6 @@ class MainView(View):
         return render(request, 'index.html')
 
 
-# add register option
-
 class LoginView(View):
     def get(self, request):
         if request.user.is_authenticated:
@@ -36,6 +34,12 @@ class LogoutView(View):
     def get(self, request):
         logout(request)
         return redirect('base')
+
+
+class BaseView(View):
+    def get(self, request):
+        user = request.user
+        return render(request, "base.html", {'user': user})
 
 
 class QuickGameView(View):

@@ -79,6 +79,7 @@ class QuickGameView(View):
 
         # maybe add custon message that user can see when inputing
         # when email spelled incoreccly by user - need a msg but there is a problem because it is JS not forms!!!
+        # valitation error - need to add it to forms.py
 
 
 def secret_santa(participants, max_price, currency):
@@ -96,3 +97,15 @@ def secret_santa(participants, max_price, currency):
         print(f'Successfully sent email to {giver_email}')
 
         # many mails sending is time consuming - work on this later
+
+
+# must:
+# add / remove / edit event group participant
+# my games / games i participate in
+# game form
+# register
+
+# maybe:
+# change password
+# custom message?
+# view with results for email (if simmilar to games i participate in - then it is a must)

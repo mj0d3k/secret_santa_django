@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.views import View
 from .forms import GameForm
+from .models import Event, Group
 import random
 # import smtplib
 # from email.mime.text import MIMEText
@@ -35,13 +36,21 @@ class LoginView(View):
 class LogoutView(View):
     def get(self, request):
         logout(request)
-        return redirect('base')
+        return render(request, "index.html")
 
 
-class BaseView(View):
+class BaseView(View): # this view is just temporary - will be deleted later
     def get(self, request):
         user = request.user
-        return render(request, "base.html", {'user': user})
+        return render(request, "base.html", {'user': user}) # base meaning logged user view - main view for logged user!
+
+
+class LoggedUserView(View):
+    def get(self, request):
+        user = request.user
+        events = Event.objects.filter(organizer=user)
+        groups = Group.objects.filter(event__organizer=user)
+        return render(request, "logged_user.html", {'user': user, 'events': events, 'groups': groups})
 
 
 class QuickGameView(View):

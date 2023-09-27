@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Your created events:</h1>
+    <ul>
+        {% for event in events %}
+            <li>{{ event.name }} - {{ event.date }}</li>
+        {% endfor %}
+    </ul>
+
+    <h1>Your created groups:</h1>
+    <ul>
+        {% for group in groups %}
+            <li>{{ group.name }} - Date: {{ group.draw_date }} - Data wymiany: {{ group.exchange_date }} - Zakres cen: {{ group.price_range }}</li>
+        {% endfor %}
+    </ul>
+
+    <h1>Change password:</h1>
+    <a href="/change-password/">Change password</a>
+
+    <h1>Add:</h1>
+    <ul>
+        <li><a href="/add-event/">event</a></li>
+        <li><a href="/add-group/">group</a></li>
+        <li><a href="/add-player/">player</a></li>
+    </ul>
+
+    <h1>New drawing:</h1>
+    <a href="/new-draw/">New drawing</a>
+
+    <h1>My drawings:</h1>
+    <a href="/my-draws/">My drawings</a>
+
+    <h1>Drawings I participate in:</h1>
+    <a href="/participating-draws/">Drawings I participate in</a>
+
+{% endblock %}
+

@@ -26,7 +26,7 @@ class Group(models.Model):
     name = models.CharField(max_length=64)
     event = models.ForeignKey(Event, on_delete=models.CASCADE) # one:many relationship
     participants = models.ManyToManyField(Participant) # many:many relationship
-    draw_date = models.DateField()
+    draw_date = models.DateField() # propably will be deleted due to lack of option of choosing date of email sending
     exchange_date = models.DateField()
     price_range = models.DecimalField(max_digits=6, decimal_places=2)
 

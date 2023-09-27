@@ -20,7 +20,7 @@ from secret_santa.views import (MainView,
                                 QuickGameView,
                                 LoginView,
                                 LogoutView,
-                                BaseView,)
+                                LoggedUserView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,5 +28,5 @@ urlpatterns = [
     path('quick-game/', QuickGameView.as_view(), name='quick_game'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
-    path('logged/', BaseView.as_view(), name='base'),
+    path('logged/', LoggedUserView.as_view(), name='base'),
 ]

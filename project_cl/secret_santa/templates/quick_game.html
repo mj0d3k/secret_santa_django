@@ -35,6 +35,8 @@
             const addButton = document.getElementById("add-player");
         
             let playerCounter = 3;
+            const numPlayersInput = document.getElementById("num-players");
+            
             addButton.addEventListener("click", function() {
                 const nameLabel = document.createElement("label");
                 nameLabel.textContent = `Player ${playerCounter + 1} Name:`;

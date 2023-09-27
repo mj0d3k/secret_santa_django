@@ -68,6 +68,9 @@ class QuickGameView(View):
         else:
             return HttpResponse("error")
 
+        # maybe add custon message that user can see when inputing
+        # when email spelled incoreccly by user - need a msg but there is a problem because it is JS not forms!!!
+
 
 def secret_santa(participants, max_price, currency):
     random.shuffle(participants)
@@ -82,3 +85,5 @@ def secret_santa(participants, max_price, currency):
         recipient_list = [giver_email]
         send_mail(subject, message, email_from, recipient_list)
         print(f'Successfully sent email to {giver_email}')
+
+        # many mails sending is time consuming - work on this later

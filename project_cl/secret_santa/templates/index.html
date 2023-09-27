@@ -6,9 +6,11 @@
 </head>
 <body>
     <h1>Ho, ho, ho!</h1>
-    <a href="/quick-game/"> <button>Quick Game</button></a>
-    <a href="/login/"> <button>Login / Register</button></a>
+    {% if user.is_authenticated %}
+        <a href="/logged/">My Profile</a>
+    {% else %}
+        <a href="/quick-game/">Quick Game</a>
+        <a href="/login/">Login / Register</a>
+    {% endif %}
 </body>
 {% endblock %}
-
-</html>

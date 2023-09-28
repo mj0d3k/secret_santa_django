@@ -224,13 +224,8 @@ class DeletePlayerView(View):
         return redirect('base')
 
 
-# game view for logged user
-
-
-
-
-
-
+class GameView(View):
+    pass
 
 
 

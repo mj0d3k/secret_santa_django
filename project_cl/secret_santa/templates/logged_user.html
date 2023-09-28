@@ -19,9 +19,6 @@
 
 <div class="main content">
 
-    <h1>New shuffle:</h1>
-    <a href="/new-draw/">New shuffle</a>
-
     <h1>Your created events:</h1>
     <ul>
         {% for event in events %}
@@ -35,12 +32,16 @@
     <h1>Your created groups:</h1>
     <ul>
         {% for group in groups %}
-            <li>{{ group.name }} | {{ group.event }} | {{ group.exchange_date }} | {{ group.price_limit }}</li>
+            <li>{{ group.name }} | {{ group.event.name }} | {{ group.exchange_date }} | {{ group.price_limit }}</li>
             <a href="/edit-group/{{ group.id }}/">Edit</a>
             <a href="/delete-group/{{ group.id }}/">Delete</a>
-            <a href="/show-drawing/{{ group.id }}/">Show Drawing</a>
-            <a href="/new-drawing/{{ group.id }}/">New Drawing</a>
-
+            <a href="/show-games/{{ group.id }}/">Show games</a>
+            <a href="/new-game/{{ group.id }}/">New game</a>
+            <ul>
+                {% for participant in group.participants.all %}
+                    <li>{{ participant.name }} | {{ participant.email }} | {{ participant.wishlist }}</li>
+                {% endfor %}
+            </ul>
         {% endfor %}
     </ul>
     <a href = "/add-group/">Add group</a>
@@ -54,9 +55,6 @@
         {% endfor %}
     </ul>
     <a href = "/add-player/">Add player</a>
-
-    <h1>List of shuffles:</h1>
-    <a href="/all-shuffles/">all</a>
 
     <h1>Shuffles I participate in:</h1>
     <a href="/Mmy-shuffles/">shuffles I participate in</a>

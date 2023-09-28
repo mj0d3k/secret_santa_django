@@ -24,7 +24,7 @@ class Participant(models.Model):
         return self.name
 
 
-class Gift(models.Model):
+class Gift(models.Model): # ten model chyba bedzie zbedny??
     name = models.CharField(max_length=64)
     receiver = models.ForeignKey(Participant, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)

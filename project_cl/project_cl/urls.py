@@ -29,7 +29,8 @@ from secret_santa.views import (MainView,
                                 EditPlayerView,
                                 DeleteEventView,
                                 DeleteGroupView,
-                                DeletePlayerView,)
+                                DeletePlayerView,
+                                GameView,)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -47,4 +48,5 @@ urlpatterns = [
     path('add-player/', AddPlayerView.as_view(), name='add-player'),
     path('edit-player/<int:player_id>/', EditPlayerView.as_view(), name='edit-player'),
     path('delete-player/<int:player_id>/', DeletePlayerView.as_view(), name='delete-player'),
+    path('new-game/<int:group_id>', GameView.as_view(), name='new-game'),
 ]

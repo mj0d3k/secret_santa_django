@@ -28,7 +28,7 @@ class Group(models.Model):
     participants = models.ManyToManyField(Participant) # many:many relationship
     draw_date = models.DateField() # propably will be deleted due to lack of option of choosing date of email sending
     exchange_date = models.DateField()
-    price_range = models.DecimalField(max_digits=6, decimal_places=2)
+    price_limit = models.DecimalField(max_digits=6, decimal_places=2)
 
 
 class GiftPair(models.Model):

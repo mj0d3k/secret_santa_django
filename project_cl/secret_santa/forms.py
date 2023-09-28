@@ -42,7 +42,7 @@ CURRENCY_CHOICES = [
     ('BHD', 'Bahraini dinar (BHD)'),
     ('BGN', 'Bulgarian lev (BGN)'),
     ('ARS', 'Argentine peso (ARS)'),
-] # too many?
+]
 
 
 class QucikGameForm(forms.Form):

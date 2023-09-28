@@ -224,8 +224,21 @@ class DeletePlayerView(View):
         return redirect('base')
 
 
-class GameView(View):
-    pass
+class GameView(View): # in progress
+    def get(self, request, group_id):
+        pass
+
+    def post(self, request, group_id):
+        group = get_object_or_404(Group, pk=group_id)
+        players = [(Participant.name, Participant.email) for Participant in group.participants.all()]
+        max_price = group.price_limit
+        currency = group.currency
+        date = group.exchange_date
+
+        secret_santa(players, max_price, currency, date)
+
+        return HttpResponse(f"Secret Santa for group {group.name} has been initiated.")
+
 
 
 

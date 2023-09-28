@@ -24,19 +24,66 @@ class Participant(models.Model):
         return self.name
 
 
-class Gift(models.Model): # ten model chyba bedzie zbedny??
+class Gift(models.Model): # WILL BE DELETED LATER PROPABLY?
     name = models.CharField(max_length=64)
     receiver = models.ForeignKey(Participant, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
 
 class Group(models.Model):
+
+    CURRENCY_CHOICES = [
+        ('USD', 'U.S. dollar (USD)'),
+        ('EUR', 'Euro (EUR)'),
+        ('JPY', 'Japanese yen (JPY)'),
+        ('GBP', 'Sterling (GBP)'),
+        ('CNY', 'Renminbi (CNY)'),
+        ('AUD', 'Australian dollar (AUD)'),
+        ('CAD', 'Canadian dollar (CAD)'),
+        ('CHF', 'Swiss franc (CHF)'),
+        ('HKD', 'Hong Kong dollar (HKD)'),
+        ('SGD', 'Singapore dollar (SGD)'),
+        ('SEK', 'Swedish krona (SEK)'),
+        ('KRW', 'South Korean won (KRW)'),
+        ('NOK', 'Norwegian krone (NOK)'),
+        ('NZD', 'New Zealand dollar (NZD)'),
+        ('INR', 'Indian rupee (INR)'),
+        ('MXN', 'Mexican peso (MXN)'),
+        ('TWD', 'New Taiwan dollar (TWD)'),
+        ('ZAR', 'South African rand (ZAR)'),
+        ('BRL', 'Brazilian real (BRL)'),
+        ('DKK', 'Danish krone (DKK)'),
+        ('PLN', 'Polish złoty (PLN)'),
+        ('THB', 'Thai baht (THB)'),
+        ('ILS', 'Israeli new shekel (ILS)'),
+        ('IDR', 'Indonesian rupiah (IDR)'),
+        ('CZK', 'Czech koruna (CZK)'),
+        ('AED', 'UAE dirham (AED)'),
+        ('TRY', 'Turkish lira (TRY)'),
+        ('HUF', 'Hungarian forint (HUF)'),
+        ('CLP', 'Chilean peso (CLP)'),
+        ('SAR', 'Saudi riyal (SAR)'),
+        ('PHP', 'Philippine peso (PHP)'),
+        ('MYR', 'Malaysian ringgit (MYR)'),
+        ('COP', 'Colombian peso (COP)'),
+        ('RUB', 'Russian ruble (RUB)'),
+        ('RON', 'Romanian leu (RON)'),
+        ('PEN', 'Peruvian sol (PEN)'),
+        ('BHD', 'Bahraini dinar (BHD)'),
+        ('BGN', 'Bulgarian lev (BGN)'),
+        ('ARS', 'Argentine peso (ARS)'),
+    ]
+
     name = models.CharField(max_length=64)
     event = models.ForeignKey(Event, on_delete=models.CASCADE) # one:many relationship
     participants = models.ManyToManyField(Participant) # many:many relationship
-    # draw_date = models.DateField() # propably will be deleted due to lack of option of choosing date of email sending
     exchange_date = models.DateField()
     price_limit = models.DecimalField(max_digits=6, decimal_places=2)
+    currency = models.CharField(
+        max_length=3,
+        choices=CURRENCY_CHOICES,
+        default='PLN',
+    )
 
 
 class GiftPair(models.Model):

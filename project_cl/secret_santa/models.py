@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 class Event(models.Model):
     name = models.CharField(max_length=64)
-    date = models.DateField() # chyba jednak to do kosza
+    #date = models.DateField() # chyba jednak to do kosza
     description = models.TextField()
     organizer = models.ForeignKey(User, on_delete=models.CASCADE) # one:many relationship
 

@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from .forms import EventForm, GameForm, GroupForm, ParticipantForm
 from .models import Event, Group, Participant
@@ -114,9 +114,32 @@ class AddEventView(View):
         else:
             return HttpResponse("error")
 
-    
+
 class EditEventView(View):
-    pass
+    def get(self, request, event_id):
+        event = Event.objects.get(pk=event_id)
+        form = EventForm(instance=event)
+        return render(request, 'edit_event.html', {'form': form})
+
+    def post(self, request, event_id):
+        event = Event.objects.get(pk=event_id)
+        form = EventForm(request.POST, instance=event)
+        if form.is_valid():
+            form.save()
+            return redirect('base')
+        else:
+            return HttpResponse("error")
+
+
+class DeleteEventView(View):
+    def get(self, request, event_id):
+        event = get_object_or_404(Event, pk=event_id)
+        return render(request, 'event_delete.html', {'event': event})
+
+    def post(self, request, event_id):
+        event = get_object_or_404(Event, pk=event_id)
+        event.delete()
+        return redirect('base')
 
 
 class AddGroupView(View):
@@ -133,6 +156,33 @@ class AddGroupView(View):
             return HttpResponse("error")
 
 
+class EditGroupView(View):
+    def get(self, request, group_id):
+        group = Group.objects.get(pk=group_id)
+        form = GroupForm(instance=group)
+        return render(request, 'edit_group.html', {'form': form})
+
+    def post(self, request, group_id):
+        group = Group.objects.get(pk=group_id)
+        form = GroupForm(request.POST, instance=group)
+        if form.is_valid():
+            form.save()
+            return redirect('base')
+        else:
+            return HttpResponse("error")
+
+
+class DeleteGroupView(View):
+    def get(self, request, group_id):
+        group = get_object_or_404(Group, pk=group_id)
+        return render(request, 'group_delete.html', {'group': group})
+
+    def post(self, request, group_id):
+        group = get_object_or_404(Group, pk=group_id)
+        group.delete()
+        return redirect('base')
+
+
 class AddPlayerView(View):
     def get(self, request):
         form = ParticipantForm()
@@ -146,10 +196,37 @@ class AddPlayerView(View):
         else:
             return HttpResponse("error")
 
+
+class EditPlayerView(View):
+    def get(self, request, player_id):
+        player = Participant.objects.get(pk=player_id)
+        form = ParticipantForm(instance=player)
+        return render(request, 'edit_player.html', {'form': form})
+
+    def post(self, request, player_id):
+        player = Participant.objects.get(pk=player_id)
+        form = ParticipantForm(request.POST, instance=player)
+        if form.is_valid():
+            form.save()
+            return redirect('base')
+        else:
+            return HttpResponse("error")
+
+
+class DeletePlayerView(View):
+    def get(self, request, player_id):
+        player = get_object_or_404(Participant, pk=player_id)
+        return render(request, 'player_delete.html', {'player': player})
+
+    def post(self, request, player_id):
+        player = get_object_or_404(Participant, pk=player_id)
+        player.delete()
+        return redirect('base')
+
 # must:
 # add / remove / edit event group participant
 # detail view for event / group / participant
-# my games / games i participate in
+# my games / games i participate in OR NOT MAYBE PO PROSTU NA STORNIE WSZYTSKIE INFORMACJE ŁADNIE PODANE W LOGGED, a do groups "wyniki"
 # game form / mew draw
 # register
 

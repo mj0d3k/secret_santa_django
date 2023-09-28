@@ -24,7 +24,12 @@ from secret_santa.views import (MainView,
                                 AddEventView,
                                 AddGroupView,
                                 AddPlayerView,
-                                EditEventView,)
+                                EditEventView,
+                                EditGroupView,
+                                EditPlayerView,
+                                DeleteEventView,
+                                DeleteGroupView,
+                                DeletePlayerView,)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,6 +40,11 @@ urlpatterns = [
     path('logged/', LoggedUserView.as_view(), name='base'),
     path('add-event/', AddEventView.as_view(), name='add-event'),
     path('edit-event/<int:event_id>/', EditEventView.as_view(), name='edit-event'),
+    path('delete-event/<int:event_id>/', DeleteEventView.as_view(), name='delete-event'),
     path('add-group/', AddGroupView.as_view(), name='add-group'),
+    path('edit-group/<int:group_id>/', EditGroupView.as_view(), name='edit-group'),
+    path('delete-group/<int:group_id>/', DeleteGroupView.as_view(), name='delete-group'),
     path('add-player/', AddPlayerView.as_view(), name='add-player'),
+    path('edit-player/<int:player_id>/', EditPlayerView.as_view(), name='edit-player'),
+    path('delete-player/<int:player_id>/', DeletePlayerView.as_view(), name='delete-player'),
 ]

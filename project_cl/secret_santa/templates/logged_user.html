@@ -4,9 +4,9 @@
     <h1>Your created events:</h1>
     <ul>
         {% for event in events %}
-            <li>{{ event.name }} </li>
-            <a href="/event/{{ event.id }}/">Edit</a>
-            <a href="/event/{{ event.id }}/">Delete</a>
+            <li>{{ event.name }} | {{ event.date }} | {{ event.description }} | {{ event.organizer }}</li>
+            <a href="/edit-event/{{ event.id }}/">Edit</a>
+            <a href="/delete-event/{{ event.id }}/">Delete</a>
         {% endfor %}
     </ul>
     <a href = "/add-event/">Add event</a>
@@ -14,9 +14,9 @@
     <h1>Your created groups:</h1>
     <ul>
         {% for group in groups %}
-            <li>{{ group.name }} - {{ group.exchange_date }}</li>
-            <a href="/group/{{ group.id }}/">Edit</a>
-            <a href="/group/{{ group.id }}/">Delete</a>
+            <li>{{ group.name }} | {{ group.event }} | {{ group.exchange_date }} | {{ group.price_limit }}</li>
+            <a href="/edit-group/{{ group.id }}/">Edit</a>
+            <a href="/delete-group/{{ group.id }}/">Delete</a>
         {% endfor %}
     </ul>
     <a href = "/add-group/">Add group</a>
@@ -24,9 +24,9 @@
     <h1>Your created players:</h1>
     <ul>
         {% for person in players %}
-            <li>{{ person.name }} - {{ person.email }} </li>
-            <a href="/player/{{ person.id }}/">Edit</a>
-            <a href="/player/{{ person.id }}/">Delete</a>
+            <li>{{ person.name }} | {{ person.email }} | {{ person.wishlist }}</li>
+            <a href="/edit-player/{{ person.id }}/">Edit</a>
+            <a href="/delete-player/{{ person.id }}/">Delete</a>
         {% endfor %}
     </ul>
     <a href = "/add-player/">Add player</a>

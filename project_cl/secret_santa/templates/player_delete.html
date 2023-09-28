@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<head>
+    <title>Confirmation</title>
+</head>
+<body>
+    <h1>Confirm Deletion</h1>
+    <p>Are you sure you want to delete "{{ player.name }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" value="Yes">
+        <a href="/logged/">no</a>
+    </form>
+</body>
+
+{% endblock %}

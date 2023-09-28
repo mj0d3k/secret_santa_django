@@ -1,4 +1,5 @@
 from django import forms
+from .models import Event, Group, Participant
 
 
 CURRENCY_CHOICES = [
@@ -41,9 +42,34 @@ CURRENCY_CHOICES = [
     ('BHD', 'Bahraini dinar (BHD)'),
     ('BGN', 'Bulgarian lev (BGN)'),
     ('ARS', 'Argentine peso (ARS)'),
-]
+] # too many?
 
 
 class GameForm(forms.Form):
     max_price = forms.DecimalField(label='Max price', decimal_places=2, min_value=0.01)
     currency = forms.ChoiceField(label='Currency', choices=CURRENCY_CHOICES, widget=forms.Select)
+    date = forms.DateField(label='Date', widget=forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'}))
+
+
+class EventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = '__all__'
+        widgets = {
+            'date': forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'}),
+        }
+
+
+class GroupForm(forms.ModelForm):
+    class Meta:
+        model = Group
+        fields = '__all__'
+        widgets = {
+            'exchange_date': forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'}),
+        }
+
+
+class ParticipantForm(forms.ModelForm):
+    class Meta:
+        model = Participant
+        fields = '__all__'

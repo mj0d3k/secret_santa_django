@@ -4,31 +4,40 @@
     <h1>Your created events:</h1>
     <ul>
         {% for event in events %}
-            <li>{{ event.name }} - {{ event.date }}</li>
+            <li>{{ event.name }} </li>
+            <a href="/event/{{ event.id }}/">Edit</a>
+            <a href="/event/{{ event.id }}/">Delete</a>
         {% endfor %}
     </ul>
+    <a href = "/add-event/">Add event</a>
 
     <h1>Your created groups:</h1>
     <ul>
         {% for group in groups %}
-            <li>{{ group.name }} - Date: {{ group.draw_date }} - Data wymiany: {{ group.exchange_date }} - Zakres cen: {{ group.price_range }}</li>
+            <li>{{ group.name }} - {{ group.exchange_date }}</li>
+            <a href="/group/{{ group.id }}/">Edit</a>
+            <a href="/group/{{ group.id }}/">Delete</a>
         {% endfor %}
     </ul>
+    <a href = "/add-group/">Add group</a>
 
-    <h1>Add:</h1>
+    <h1>Your created players:</h1>
     <ul>
-        <li><a href="/add-event/">event</a></li>
-        <li><a href="/add-group/">group</a></li>
-        <li><a href="/add-player/">player</a></li>
+        {% for person in players %}
+            <li>{{ person.name }} - {{ person.email }} </li>
+            <a href="/player/{{ person.id }}/">Edit</a>
+            <a href="/player/{{ person.id }}/">Delete</a>
+        {% endfor %}
     </ul>
+    <a href = "/add-player/">Add player</a>
 
-    <h1>New drawing:</h1>
-    <a href="/new-draw/">New drawing</a>
+    <h1>My shuffles:</h1>
+    <a href="/my-draws/">My shuffles</a>
 
-    <h1>My drawings:</h1>
-    <a href="/my-draws/">My drawings</a>
+    <h1>New shuffle:</h1>
+    <a href="/new-draw/">New shuffle</a>
 
-    <h1>Drawings I participate in:</h1>
-    <a href="/participating-draws/">Drawings I participate in</a>
+    <h1>Shuffles I participate in:</h1>
+    <a href="/participating-draws/">shuffles I participate in</a>
 
 {% endblock %}

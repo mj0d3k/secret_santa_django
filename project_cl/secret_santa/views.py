@@ -1,8 +1,8 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.views import View
-from .forms import GameForm
-from .models import Event, Group
+from .forms import EventForm, GameForm, GroupForm, ParticipantForm
+from .models import Event, Group, Participant
 import random
 # import smtplib
 # from email.mime.text import MIMEText
@@ -50,7 +50,8 @@ class LoggedUserView(View):
         user = request.user
         events = Event.objects.filter(organizer=user)
         groups = Group.objects.filter(event__organizer=user)
-        return render(request, "logged_user.html", {'user': user, 'events': events, 'groups': groups})
+        players = Participant.objects.filter(creator=user)
+        return render(request, "logged_user.html", {'user': user, 'events': events, 'groups': groups, 'players': players})
 
 
 class QuickGameView(View):
@@ -63,6 +64,7 @@ class QuickGameView(View):
         if form.is_valid():
             max_price = form.cleaned_data['max_price']
             currency = form.cleaned_data['currency']
+            date = form.cleaned_data['date']
             num_players = int(request.POST.get('num_players', 0))
 
             participants = []
@@ -71,9 +73,9 @@ class QuickGameView(View):
                 players_email = request.POST.get(f'player_email_{i}')
                 participants.append((players_name, players_email))
 
-            secret_santa(participants, max_price, currency)
+            secret_santa(participants, max_price, currency, date)
 
-            return HttpResponse("success")
+            return HttpResponse("success") # need another view with congrats and maybe summary if you input an email
         else:
             return HttpResponse("error")
 
@@ -82,7 +84,7 @@ class QuickGameView(View):
         # valitation error - need to add it to forms.py
 
 
-def secret_santa(participants, max_price, currency):
+def secret_santa(participants, max_price, currency, date):
     random.shuffle(participants)
     for i in range(len(participants)):
         giver_name, giver_email = participants[i]
@@ -99,10 +101,56 @@ def secret_santa(participants, max_price, currency):
         # many mails sending is time consuming - work on this later
 
 
+class AddEventView(View):
+    def get(self, request):
+        form = EventForm()
+        return render(request, 'add_event.html', {'form': form})
+
+    def post(self, request):
+        form = EventForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('base')
+        else:
+            return HttpResponse("error")
+
+    
+class EditEventView(View):
+    pass
+
+
+class AddGroupView(View):
+    def get(self, request):
+        form = GroupForm()
+        return render(request, 'add_group.html', {'form': form})
+
+    def post(self, request):
+        form = GroupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('base')
+        else:
+            return HttpResponse("error")
+
+
+class AddPlayerView(View):
+    def get(self, request):
+        form = ParticipantForm()
+        return render(request, 'add_player.html', {'form': form})
+
+    def post(self, request):
+        form = ParticipantForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('base')
+        else:
+            return HttpResponse("error")
+
 # must:
 # add / remove / edit event group participant
+# detail view for event / group / participant
 # my games / games i participate in
-# game form
+# game form / mew draw
 # register
 
 # maybe:

@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 class Event(models.Model):
     name = models.CharField(max_length=64)
-    date = models.DateField()
+    date = models.DateField() # chyba jednak to do kosza
     description = models.TextField()
     organizer = models.ForeignKey(User, on_delete=models.CASCADE) # one:many relationship
 
@@ -14,6 +14,14 @@ class Participant(models.Model):
     last_name = models.CharField(max_length=64)
     email = models.EmailField()
     wishlist = models.TextField(blank=True, null=True) # optional
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, default=None) # one:many relationship
+
+    @property
+    def name(self):
+        return "{} {}".format(self.first_name, self.last_name)
+
+    def __str__(self):
+        return self.name
 
 
 class Gift(models.Model):
@@ -26,7 +34,7 @@ class Group(models.Model):
     name = models.CharField(max_length=64)
     event = models.ForeignKey(Event, on_delete=models.CASCADE) # one:many relationship
     participants = models.ManyToManyField(Participant) # many:many relationship
-    draw_date = models.DateField() # propably will be deleted due to lack of option of choosing date of email sending
+    # draw_date = models.DateField() # propably will be deleted due to lack of option of choosing date of email sending
     exchange_date = models.DateField()
     price_limit = models.DecimalField(max_digits=6, decimal_places=2)
 

@@ -32,7 +32,7 @@
     <h1>Your created groups:</h1>
     <ul>
         {% for group in groups %}
-            <li>{{ group.name }} | {{ group.event.name }} | {{ group.exchange_date }} | {{ group.price_limit }}</li>
+            <li>{{ group.name }} | {{ group.exchange_date }} | {{ group.price_limit }} | {{ group.creator }}</li>
             <a href="/edit-group/{{ group.id }}/">Edit</a>
             <a href="/delete-group/{{ group.id }}/">Delete</a>
             <a href="/show-games/{{ group.id }}/">Show games</a>

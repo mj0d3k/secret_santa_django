@@ -75,7 +75,8 @@ class Group(models.Model):
     ]
 
     name = models.CharField(max_length=64)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE) # one:many relationship
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, default=1) # one:many relationship
+    #event = models.ForeignKey(Event, on_delete=models.CASCADE) # one:many relationship
     participants = models.ManyToManyField(Participant) # many:many relationship
     exchange_date = models.DateField()
     price_limit = models.DecimalField(max_digits=6, decimal_places=2)

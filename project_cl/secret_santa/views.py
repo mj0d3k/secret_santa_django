@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
-from .forms import EventForm, GroupForm, ParticipantForm, QucikGameForm
+from .forms import EventForm, GameForm, GroupForm, ParticipantForm, QucikGameForm
 from .models import Event, Group, Participant
 import random
 # import smtplib
@@ -49,7 +49,7 @@ class LoggedUserView(View):
     def get(self, request):
         user = request.user
         events = Event.objects.filter(organizer=user)
-        groups = Group.objects.filter(event__organizer=user)
+        groups = Group.objects.filter(creator=user)
         players = Participant.objects.filter(creator=user)
         return render(request, "logged_user.html", {'user': user, 'events': events, 'groups': groups, 'players': players})
 
@@ -225,19 +225,12 @@ class DeletePlayerView(View):
 
 
 class GameView(View): # in progress
-    def get(self, request, group_id):
+    def get(self, request):
+        form = GameForm()
+        return render(request, 'game.html', {'form': form})
+    
+    def post(self, request):
         pass
-
-    def post(self, request, group_id):
-        group = get_object_or_404(Group, pk=group_id)
-        players = [(Participant.name, Participant.email) for Participant in group.participants.all()]
-        max_price = group.price_limit
-        currency = group.currency
-        date = group.exchange_date
-
-        secret_santa(players, max_price, currency, date)
-
-        return HttpResponse(f"Secret Santa for group {group.name} has been initiated.")
 
 
 

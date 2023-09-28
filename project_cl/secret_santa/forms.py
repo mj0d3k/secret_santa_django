@@ -45,7 +45,7 @@ CURRENCY_CHOICES = [
 ] # too many?
 
 
-class GameForm(forms.Form):
+class QucikGameForm(forms.Form):
     max_price = forms.DecimalField(label='Max price', decimal_places=2, min_value=0.01)
     currency = forms.ChoiceField(label='Currency', choices=CURRENCY_CHOICES, widget=forms.Select)
     date = forms.DateField(label='Date', widget=forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'}))

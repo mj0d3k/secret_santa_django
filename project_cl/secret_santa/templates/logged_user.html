@@ -1,6 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <link rel="stylesheet" type="text/css" href="static/css/style.css"> 
+    <div class="info-bar">
+        <div class="menu-container">
+            <a class="menu-link" href="/quick-game/">Quick game</a>
+            <span class="user-info">User logged: {{ user.username }}</span>
+            {% if user.is_authenticated %}
+            <a class="menu-link" href="/logout/">Logout</a>
+            <a class="menu-link" href="/change-password/">Change password</a>
+            {% else %}
+            <a class="menu-link" href="/login/">Login</a>
+            {% endif %}
+            <!-- <a class="menu-link" href="/change-email/">Change email</a>
+            <a class="menu-link" href="/delete-account/">Delete account</a> -->
+        </div>
+    </div>
+
+<div class="main content">
+
+    <h1>New shuffle:</h1>
+    <a href="/new-draw/">New shuffle</a>
+
     <h1>Your created events:</h1>
     <ul>
         {% for event in events %}
@@ -17,6 +38,9 @@
             <li>{{ group.name }} | {{ group.event }} | {{ group.exchange_date }} | {{ group.price_limit }}</li>
             <a href="/edit-group/{{ group.id }}/">Edit</a>
             <a href="/delete-group/{{ group.id }}/">Delete</a>
+            <a href="/show-drawing/{{ group.id }}/">Show Drawing</a>
+            <a href="/new-drawing/{{ group.id }}/">New Drawing</a>
+
         {% endfor %}
     </ul>
     <a href = "/add-group/">Add group</a>
@@ -31,13 +55,16 @@
     </ul>
     <a href = "/add-player/">Add player</a>
 
-    <h1>My shuffles:</h1>
-    <a href="/my-draws/">My shuffles</a>
-
-    <h1>New shuffle:</h1>
-    <a href="/new-draw/">New shuffle</a>
+    <h1>List of shuffles:</h1>
+    <a href="/all-shuffles/">all</a>
 
     <h1>Shuffles I participate in:</h1>
-    <a href="/participating-draws/">shuffles I participate in</a>
+    <a href="/Mmy-shuffles/">shuffles I participate in</a>
 
+</div>
+
+{% endblock %}
+
+{% block footer %}
+ <p>Secret Santa by me</p>
 {% endblock %}

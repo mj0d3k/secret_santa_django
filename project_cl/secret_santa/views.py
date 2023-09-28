@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
-from .forms import EventForm, GameForm, GroupForm, ParticipantForm
+from .forms import EventForm, GroupForm, ParticipantForm, QucikGameForm
 from .models import Event, Group, Participant
 import random
 # import smtplib
@@ -56,11 +56,11 @@ class LoggedUserView(View):
 
 class QuickGameView(View):
     def get(self, request):
-        form = GameForm()
+        form = QucikGameForm()
         return render(request, 'quick_game.html', {'form': form})
 
     def post(self, request):
-        form = GameForm(request.POST)
+        form = QucikGameForm(request.POST)
         if form.is_valid():
             max_price = form.cleaned_data['max_price']
             currency = form.cleaned_data['currency']
@@ -223,9 +223,19 @@ class DeletePlayerView(View):
         player.delete()
         return redirect('base')
 
+
+# game view for logged user
+
+
+
+
+
+
+
+
+
 # must:
-# add / remove / edit event group participant
-# detail view for event / group / participant
+# detail view for event / group / participant?
 # my games / games i participate in OR NOT MAYBE PO PROSTU NA STORNIE WSZYTSKIE INFORMACJE ŁADNIE PODANE W LOGGED, a do groups "wyniki"
 # game form / mew draw
 # register
@@ -233,4 +243,7 @@ class DeletePlayerView(View):
 # maybe:
 # change password
 # custom message?
+# delete account
+# change email
+# change username
 # view with results for email (if simmilar to games i participate in - then it is a must)

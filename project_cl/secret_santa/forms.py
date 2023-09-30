@@ -75,6 +75,6 @@ class ParticipantForm(forms.ModelForm):
         fields = '__all__'
 
 
-class GameForm(forms.ModelForm):
-    event = forms.ModelChoiceField(queryset=Event.objects.all(), widget=forms.HiddenInput())
-    group = forms.ModelChoiceField(queryset=Group.objects.all(), widget=forms.HiddenInput())
+class GameForm(forms.Form):
+    event = forms.ModelChoiceField(queryset=Event.objects.all())
+    group = forms.ModelChoiceField(queryset=Group.objects.all())

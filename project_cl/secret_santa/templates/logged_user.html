@@ -35,8 +35,7 @@
             <li>{{ group.name }} | {{ group.exchange_date }} | {{ group.price_limit }} | {{ group.creator }}</li>
             <a href="/edit-group/{{ group.id }}/">Edit</a>
             <a href="/delete-group/{{ group.id }}/">Delete</a>
-            <a href="/show-games/{{ group.id }}/">Show games</a>
-            <a href="/new-game/{{ group.id }}/">New game</a>
+            <a href="/gift-pairs/{{ group.id }}/">Show games</a>
             <ul>
                 {% for participant in group.participants.all %}
                     <li>{{ participant.name }} | {{ participant.email }} | {{ participant.wishlist }}</li>
@@ -55,6 +54,9 @@
         {% endfor %}
     </ul>
     <a href = "/add-player/">Add player</a>
+
+    <h1>Create new game:</h1>
+    <a href="/new-game/">Dodaj nową grę</a>
 
     <h1>Shuffles I participate in:</h1>
     <a href="/Mmy-shuffles/">shuffles I participate in</a>

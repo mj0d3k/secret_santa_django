@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from .forms import EventForm, GameForm, GroupForm, ParticipantForm, QucikGameForm
-from .models import Event, Group, Participant
+from .models import Event, GiftPair, Group, Participant
 import random
 # import smtplib
 # from email.mime.text import MIMEText
@@ -92,7 +92,10 @@ def secret_santa(participants, max_price, currency, date):
         receiver_name, receiver_email = participants[next_index]
 
         subject = 'Secret Santa'
-        message = f'Hi {giver_name},\n\nYou are {receiver_name}\'s Secret Santa!\n\nBest wishes,\nSecret Santa'
+        message = f'Hi {giver_name},\n\nYou are {receiver_name}\'s Secret Santa!'
+        message += f'\n\nThe maximum price for gifts is {max_price} {currency}.'
+        message += f'\nThe exchange date is {date}.'
+        message += f'\n\nBest wishes,\nSecret Santa'
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [giver_email]
         send_mail(subject, message, email_from, recipient_list)
@@ -224,14 +227,60 @@ class DeletePlayerView(View):
         return redirect('base')
 
 
-class GameView(View): # in progress
+class GameView(View):
     def get(self, request):
         form = GameForm()
         return render(request, 'game.html', {'form': form})
-    
-    def post(self, request):
-        pass
 
+    def post(self, request):
+        form = GameForm(request.POST)
+        if form.is_valid():
+            event = form.cleaned_data['event']
+            group = form.cleaned_data['group']
+            participants = [(participant.name, participant.email) for participant in group.participants.all()]
+            max_price = group.price_limit
+            currency = group.currency
+            date = group.exchange_date
+
+            # secret santa function logic
+            random.shuffle(participants)
+            for i in range(len(participants)):
+                giver_name, giver_email = participants[i]
+                next_index = (i+1) % len(participants)
+                receiver_name, receiver_email = participants[next_index]
+
+                giver = Participant.objects.get(email=giver_email)
+                receiver = Participant.objects.get(email=receiver_email)
+
+                gift_pair = GiftPair(
+                    giver=giver,
+                    receiver=receiver,
+                    event=event,
+                    group=group,
+                )
+                gift_pair.save()
+
+                # sending emails logic
+
+                subject = 'Secret Santa'
+                message = f'Hi {giver.name},\n\nYou are {receiver.name}\'s Secret Santa!'
+                message += f'\n\nThe maximum price for gifts is {max_price} {currency}.'
+                message += f'\nThe exchange date is {date}.'
+                message += f'\n\nBest wishes,\nSecret Santa'
+                email_from = settings.EMAIL_HOST_USER
+                recipient_list = [giver.email]
+                send_mail(subject, message, email_from, recipient_list)
+
+            return redirect('gift-pairs', group_id=group.id)
+        else:
+            return HttpResponse("error")
+
+
+class GiftPairs(View):
+    def get(self, request, group_id):
+        group = get_object_or_404(Group, pk=group_id)
+        gift_pairs = GiftPair.objects.filter(group=group)
+        return render(request, 'gift_pairs.html', {'gift_pairs': gift_pairs})
 
 
 

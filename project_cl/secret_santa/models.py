@@ -8,6 +8,9 @@ class Event(models.Model):
     description = models.TextField()
     organizer = models.ForeignKey(User, on_delete=models.CASCADE) # one:many relationship
 
+    def __str__(self):
+        return self.name
+
 
 class Participant(models.Model):
     first_name = models.CharField(max_length=64)
@@ -85,6 +88,9 @@ class Group(models.Model):
         choices=CURRENCY_CHOICES,
         default='PLN',
     )
+
+    def __str__(self):
+        return self.name
 
 
 class GiftPair(models.Model):

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+    <title>Gift Pair List</title>
+</head>
+<body>
+    <h1>Gift Pair List</h1>
+    
+    <ul>
+        {% for gift_pair in gift_pairs %}
+            <li>
+                Giver: {{ gift_pair.giver }} -> Receiver: {{ gift_pair.receiver }}
+                (In group: {{ gift_pair.group }} for event: {{ gift_pair.event }})
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+    
+    {% endblock %}

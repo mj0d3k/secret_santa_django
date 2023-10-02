@@ -34,7 +34,8 @@ from secret_santa.views import (MainView,
                                 GameView,
                                 GiftPairs,
                                 ChangePassword,
-                                MyGiftPairsView,)
+                                MyGiftPairsView,
+                                LookupView,)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -58,4 +59,5 @@ urlpatterns = [
     path('change-password/', ChangePassword.as_view(), name='change-password'),
     path('delete-account/<int:pk>/', views.DeleteAccountView.as_view(), name='delete_account'),
     path('my-gift-pairs/', MyGiftPairsView.as_view(), name='my-gift-pairs'),
+    path('email-lookup/', LookupView.as_view(), name='email-lookup'),
 ]

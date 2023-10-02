@@ -18,16 +18,17 @@
 
 <div class="main content">
 
-    <h1>Your created games:</h1>
-    {% regroup gift_pairs by event as event_list %}
+    <h1>Gift Pair List</h1>
 
+    {% regroup gift_pairs by event as event_list %}
+    
     {% for event in event_list %}
         <h2>Event: {{ event.grouper.name }}</h2>
         <ul>
             {% regroup event.list by group as group_list %}
-
+    
             {% for group in group_list %}
-                <h3>Group: {{ group.grouper.name }} for date: {{ group.list.0.date }}</h3>
+                <h3>Group: {{ group.grouper.name }} for date: {{ group.list.0.event.date }}</h3>
                 <li>
                     <button class="reveal-button" data-group="{{ group.grouper.name }}">Reveal</button>
                     <ul class="hidden" data-group="{{ group.grouper.name }}" style="display: none;">
@@ -88,16 +89,16 @@
 {% endblock %}
 
 <script>
-    const revealButtons = document.querySelectorAll('.reveal-button');
-    revealButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const groupName = button.getAttribute('data-group');
-            const giverReceiverList = document.querySelectorAll(`ul[data-group="${groupName}"]`);
-            giverReceiverList.forEach(list => {
-                if (list.style.display === 'none') {
-                    list.style.display = 'block';
+    document.addEventListener('DOMContentLoaded', function () {
+        const revealButtons = document.querySelectorAll('.reveal-button');
+        revealButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const groupName = button.getAttribute('data-group');
+                const giftPairList = document.querySelector(`ul[data-group="${groupName}"]`);
+                if (giftPairList.style.display === 'none' || giftPairList.style.display === '') {
+                    giftPairList.style.display = 'block';
                 } else {
-                    list.style.display = 'none';
+                    giftPairList.style.display = 'none';
                 }
             });
         });

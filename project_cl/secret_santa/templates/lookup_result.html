@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Results for {{ user_email }}</h1>
+<ul>
+    {% for gift_pair in gift_pairs %}
+        <li>
+            Event: {{ gift_pair.event.name }}
+            Date: {{ gift_pair.date }}
+            Receiver: {{ gift_pair.receiver.name }}
+            Wishlist: {{ gift_pair.receiver.wishlist }}
+        </li>
+    {% empty %}
+        <li>No gift pairs found.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

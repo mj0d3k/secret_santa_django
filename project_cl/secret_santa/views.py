@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views import View
-from .forms import EventForm, GameForm, GroupForm, ParticipantForm, QucikGameForm, RegisterForm
+from .forms import EmailLookupForm, EventForm, GameForm, GroupForm, ParticipantForm, QucikGameForm, RegisterForm
 from .models import Event, GiftPair, Group, Participant
 import random
 # import smtplib
@@ -53,14 +53,22 @@ class BaseView(View): # this view is just temporary - will be deleted later
         return render(request, "base.html", {'user': user}) # base meaning logged user view - main view for logged user!
 
 
-class LoggedUserView(View):
+class LoggedUserView(View): # does not fully work
     def get(self, request):
         gift_pairs = GiftPair.objects.all()
         user = request.user
         events = Event.objects.filter(organizer=user)
         groups = Group.objects.filter(creator=user)
         players = Participant.objects.filter(creator=user)
-        return render(request, "logged_user.html", {'user': user, 'events': events, 'groups': groups, 'players': players, 'gift_pairs': gift_pairs})
+        events_with_draws = Event.objects.filter(giftpair__in=gift_pairs).distinct()
+        return render(request, "logged_user.html", {
+            'user': user,
+            'events': events,
+            'groups': groups,
+            'players': players,
+            'gift_pairs': gift_pairs,
+            'events_with_draws': events_with_draws,
+        })
 
 
 class QuickGameView(View):
@@ -84,7 +92,7 @@ class QuickGameView(View):
 
             secret_santa(participants, max_price, currency, date)
 
-            return HttpResponse("success") # need another view with congrats and maybe summary if you input an email
+            return HttpResponse("success")
         else:
             return HttpResponse("error")
 
@@ -334,15 +342,36 @@ class MyGiftPairsView(View):
         return render(request, 'my_gift_pairs.html', {'gift_pairs': gift_pairs, 'today': today})
 
 
+class LookupView(View): # does not work
+    def get(self, requst):
+        form = EmailLookupForm()
+        return render(requst, 'lookup.html', {'form': form})
+
+    def post(self, request):
+        form = EmailLookupForm(request.POST)
+        if form.is_valid():
+            user_email = form.cleaned_data['email']
+            try: 
+                participant = Participant.objects.get(email=user_email)
+                gift_pairs = GiftPair.objects.filter(giver=participant)
+            except Participant.DoesNotExist:
+                gift_pairs = []
+
+            return render(request, 'my_gift_pairs.html', {'gift_pairs': gift_pairs})
+
+        return render(request, 'lookup.html', {'form': form})
 
 # TO DO:
 # validaton
-# desgin
+# desgin + description
 # buttns if necesery
 # reset password
 # gift pairs on logged view does not work
+# in event group and player add creator automatically
 # custom messages
 # what about people who want to check their games, but it was quick game and it is not saved in db? maybe model for quick game in db will solve it
 # is model group even necessery? i can add more data fields to game form - but it is not very important
 # settings!!
 # python anywhere
+# tests
+# documentation

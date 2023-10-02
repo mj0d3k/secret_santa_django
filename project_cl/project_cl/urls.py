@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from secret_santa import views
 from secret_santa.views import (MainView,
                                 QuickGameView,
                                 LoginView,
@@ -32,8 +33,8 @@ from secret_santa.views import (MainView,
                                 DeletePlayerView,
                                 GameView,
                                 GiftPairs,
-                                MyGamesView,
-                                RegisterView,)
+                                ChangePassword,
+                                MyGiftPairsView,)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -53,6 +54,8 @@ urlpatterns = [
     path('delete-player/<int:player_id>/', DeletePlayerView.as_view(), name='delete-player'),
     path('new-game/', GameView.as_view(), name='new-game'),
     path('gift-pairs/<int:group_id>/', GiftPairs.as_view(), name='gift-pairs'),
-    path('my-games/', MyGamesView.as_view, name='my-games'),
-    path('register/', RegisterView.as_view(), name='register'),
+    path('register/', views.register, name='register'),
+    path('change-password/', ChangePassword.as_view(), name='change-password'),
+    path('delete-account/<int:pk>/', views.DeleteAccountView.as_view(), name='delete_account'),
+    path('my-gift-pairs/', MyGiftPairsView.as_view(), name='my-gift-pairs'),
 ]

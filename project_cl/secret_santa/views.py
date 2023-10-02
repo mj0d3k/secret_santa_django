@@ -1,7 +1,9 @@
+from datetime import date
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy
 from django.views import View
-from .forms import EventForm, GameForm, GroupForm, ParticipantForm, QucikGameForm
+from .forms import EventForm, GameForm, GroupForm, ParticipantForm, QucikGameForm, RegisterForm
 from .models import Event, GiftPair, Group, Participant
 import random
 # import smtplib
@@ -9,6 +11,12 @@ import random
 from django.conf import settings
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.views import PasswordChangeView
+from django.views.generic.edit import DeleteView
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
+from django.contrib.messages.views import SuccessMessageMixin
 
 
 class MainView(View):
@@ -237,10 +245,10 @@ class GameView(View):
         if form.is_valid():
             event = form.cleaned_data['event']
             group = form.cleaned_data['group']
+            date = form.cleaned_data['date']
             participants = [(participant.name, participant.email) for participant in group.participants.all()]
             max_price = group.price_limit
             currency = group.currency
-            date = group.exchange_date
 
             # secret santa function logic
             random.shuffle(participants)
@@ -257,6 +265,7 @@ class GameView(View):
                     receiver=receiver,
                     event=event,
                     group=group,
+                    date=date
                 )
                 gift_pair.save()
 
@@ -272,6 +281,7 @@ class GameView(View):
                 send_mail(subject, message, email_from, recipient_list)
 
             return redirect('gift-pairs', group_id=group.id)
+            #return render(request, 'game.html', {'form': form, 'date': date})
         else:
             return HttpResponse("error")
 
@@ -283,17 +293,53 @@ class GiftPairs(View):
         return render(request, 'gift_pairs.html', {'gift_pairs': gift_pairs})
 
 
+def register(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = RegisterForm()
+    return render(request, 'register.html', {'form': form})
+
+
+
+class ChangePassword(PasswordChangeView):
+    template_name = 'change_password.html'
+    success_url = '/login/'
+
+
+class DeleteAccountView(SuccessMessageMixin, DeleteView):
+    model = User
+    template_name = 'user_delete_confirm.html'
+    success_message = 'Your account has been deleted.'
+    success_url = reverse_lazy('index')
+
+
+class MyGiftPairsView(View):
+    def get(self, request):
+        today = date.today()
+        user_email = request.user.email
+
+        try:
+            participant = Participant.objects.get(email=user_email)
+            gift_pairs = GiftPair.objects.filter(giver=participant)
+        except Participant.DoesNotExist:
+            gift_pairs = []
+
+        if not gift_pairs:
+            return HttpResponse("Your email does not participate in any games yet.")
+
+        return render(request, 'my_gift_pairs.html', {'gift_pairs': gift_pairs, 'today': today})
+
 
 # must:
-# detail view for event / group / participant?
 # my games / games i participate in OR NOT MAYBE PO PROSTU NA STORNIE WSZYTSKIE INFORMACJE ŁADNIE PODANE W LOGGED, a do groups "wyniki"
-# game form / mew draw
 # register
+# game - add date bc it makes more sense than in group, also price limit from group put in html, wishlist 
 
 # maybe:
-# change password
+# forgot password
 # custom message?
-# delete account
-# change email
-# change username
 # view with results for email (if simmilar to games i participate in - then it is a must)

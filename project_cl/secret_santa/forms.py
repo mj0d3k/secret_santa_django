@@ -1,5 +1,7 @@
 from django import forms
 from .models import Event, Group, Participant
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 
 CURRENCY_CHOICES = [
@@ -78,3 +80,14 @@ class ParticipantForm(forms.ModelForm):
 class GameForm(forms.Form):
     event = forms.ModelChoiceField(queryset=Event.objects.all())
     group = forms.ModelChoiceField(queryset=Group.objects.all())
+    date = forms.DateField(widget=forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'}))
+
+
+class RegisterForm(UserCreationForm):
+    email = forms.EmailField(label='Email', required=True)
+    first_name = forms.CharField(label='First name', required=True)
+    last_name = forms.CharField(label='Last name', required=True)
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name')

@@ -12,8 +12,7 @@
             {% else %}
             <a class="menu-link" href="/login/">Login</a>
             {% endif %}
-            <a class="menu-link" href="/change-email/">Change email</a>
-            <a class="menu-link" href="/delete-account/">Delete account</a>
+            <a class="menu-link" href="{% url 'delete_account' user.id %}">Delete account</a>
         </div>
     </div>
 
@@ -59,7 +58,7 @@
     <a href="/new-game/">Dodaj nową grę</a>
 
     <h1>Shuffles I participate in:</h1>
-    <a href="/Mmy-shuffles/">shuffles I participate in</a>
+    <a href="/my-gift-pairs/">shuffles I participate in</a>
 
 </div>
 

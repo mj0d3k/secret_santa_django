@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>My Gift Pairs</h2>
+<ul>
+    {% for gift_pair in gift_pairs %}
+        {% if gift_pair.date >= today %}
+        <li>
+            Event: {{ gift_pair.event.name }}
+            Date: {{ gift_pair.date }}
+            Receiver: {{ gift_pair.receiver.name }}
+        </li>
+        {% endif %}
+    {% empty %}
+        <li>No gift pairs found.</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

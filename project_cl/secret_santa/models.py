@@ -81,7 +81,7 @@ class Group(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE, default=1) # one:many relationship
     #event = models.ForeignKey(Event, on_delete=models.CASCADE) # one:many relationship
     participants = models.ManyToManyField(Participant) # many:many relationship
-    exchange_date = models.DateField()
+    #exchange_date = models.DateField() #chyba do wyrzucenia, dodac date w forms losowania gry!!!
     price_limit = models.DecimalField(max_digits=6, decimal_places=2)
     currency = models.CharField(
         max_length=3,
@@ -98,6 +98,7 @@ class GiftPair(models.Model):
     receiver = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='gifts_received') # many:many relationship
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    date = models.DateField()
 
     def __str__(self):
         return f'Giver: {self.giver} -> Receiver: {self.receiver} (In group: {self.group} for event: {self.event})'

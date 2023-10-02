@@ -10,13 +10,36 @@
     <ul>
         {% for gift_pair in gift_pairs %}
             <p>
-                Event: {{ gift_pair.event }} For group: {{ gift_pair.group }} Date: {{ group.date }}
+                Event: {{ gift_pair.event.name }} Date: {{ gift_pair.date }} Group: {{ gift_pair.group.name }}
                 <li>
-                Giver: {{ gift_pair.giver }} -> Receiver: {{ gift_pair.receiver }}
+                    <button class="reveal-button" data-group="{{ gift_pair.group.name }}">Reveal</button>
+                    <ul class="hidden" data-group="{{ gift_pair.group.name }}" style="display: none;">
+                        {% for pair in gift_pairs %}
+                            {% if pair.group.name == gift_pair.group.name %}
+                                <li>Giver: {{ pair.giver }} -> Receiver: {{ pair.receiver }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
                 </li>
             </p>
         {% endfor %}
     </ul>
+
+    <script>
+        const revealButtons = document.querySelectorAll('.reveal-button');
+        revealButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const groupName = button.getAttribute('data-group');
+                const giverReceiverList = document.querySelectorAll(`ul[data-group="${groupName}"]`);
+                giverReceiverList.forEach(list => {
+                    if (list.style.display === 'none') {
+                        list.style.display = 'block';
+                    } else {
+                        list.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
 </body>
-    
-    {% endblock %}
+{% endblock %}

@@ -55,11 +55,12 @@ class BaseView(View): # this view is just temporary - will be deleted later
 
 class LoggedUserView(View):
     def get(self, request):
+        gift_pairs = GiftPair.objects.all()
         user = request.user
         events = Event.objects.filter(organizer=user)
         groups = Group.objects.filter(creator=user)
         players = Participant.objects.filter(creator=user)
-        return render(request, "logged_user.html", {'user': user, 'events': events, 'groups': groups, 'players': players})
+        return render(request, "logged_user.html", {'user': user, 'events': events, 'groups': groups, 'players': players, 'gift_pairs': gift_pairs})
 
 
 class QuickGameView(View):
@@ -304,7 +305,6 @@ def register(request):
     return render(request, 'register.html', {'form': form})
 
 
-
 class ChangePassword(PasswordChangeView):
     template_name = 'change_password.html'
     success_url = '/login/'
@@ -334,12 +334,15 @@ class MyGiftPairsView(View):
         return render(request, 'my_gift_pairs.html', {'gift_pairs': gift_pairs, 'today': today})
 
 
-# must:
-# my games / games i participate in OR NOT MAYBE PO PROSTU NA STORNIE WSZYTSKIE INFORMACJE ŁADNIE PODANE W LOGGED, a do groups "wyniki"
-# register
-# game - add date bc it makes more sense than in group, also price limit from group put in html, wishlist 
 
-# maybe:
-# forgot password
-# custom message?
-# view with results for email (if simmilar to games i participate in - then it is a must)
+# TO DO:
+# validaton
+# desgin
+# buttns if necesery
+# reset password
+# gift pairs on logged view does not work
+# custom messages
+# what about people who want to check their games, but it was quick game and it is not saved in db? maybe model for quick game in db will solve it
+# is model group even necessery? i can add more data fields to game form - but it is not very important
+# settings!!
+# python anywhere

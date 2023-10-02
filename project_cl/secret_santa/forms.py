@@ -61,6 +61,15 @@ class EventForm(forms.ModelForm):
             'date': forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'}),
         }
 
+# class EventForm(forms.Form):
+#     name = forms.CharField(max_length=64)
+#     description = forms.CharField(widget=forms.Textarea)
+#     date = forms.DateField(widget=forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'}))
+
+#     class Meta:
+#         model = Event
+#         fields = ['name', 'description', 'date']
+
 
 class GroupForm(forms.ModelForm):
     class Meta:

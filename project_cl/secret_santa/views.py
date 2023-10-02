@@ -135,6 +135,26 @@ class AddEventView(View):
             return HttpResponse("error")
 
 
+# class AddEventView(View):
+#     def get(self, request):
+#         form = EventForm()
+#         return render(request, 'add_event.html', {'form': form})
+
+#     def post(self, request):
+#         form = EventForm(request.POST)
+#         if form.is_valid():
+#             event = Event(
+#                 name=form.cleaned_data['name'],
+#                 description=form.cleaned_data['description'],
+#                 date=form.cleaned_data['date'],
+#                 organizer=request.user,
+#             )
+#             event.save()
+#             return redirect('base')
+#         else:
+#             return render(request, 'add_event.html', {'form': form})
+
+
 class EditEventView(View):
     def get(self, request, event_id):
         event = Event.objects.get(pk=event_id)
@@ -362,16 +382,18 @@ class LookupView(View): # does not work
         return render(request, 'lookup.html', {'form': form})
 
 # TO DO:
+# gift pairs on logged view does not work
+# look up result does not work
+
 # validaton
 # desgin + description
 # buttns if necesery
 # reset password
-# gift pairs on logged view does not work
 # in event group and player add creator automatically
 # custom messages
 # what about people who want to check their games, but it was quick game and it is not saved in db? maybe model for quick game in db will solve it
 # is model group even necessery? i can add more data fields to game form - but it is not very important
-# settings!!
+# settings!! ZMIENNE ŚRODOWISKOWE
 # python anywhere
 # tests
 # documentation

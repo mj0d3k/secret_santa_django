@@ -29,10 +29,11 @@ from secret_santa.views import (MainView,
                                 EditPlayerView,
                                 DeleteEventView,
                                 DeleteGroupView,
-                                
                                 DeletePlayerView,
                                 GameView,
-                                GiftPairs,)
+                                GiftPairs,
+                                MyGamesView,
+                                RegisterView,)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -52,4 +53,6 @@ urlpatterns = [
     path('delete-player/<int:player_id>/', DeletePlayerView.as_view(), name='delete-player'),
     path('new-game/', GameView.as_view(), name='new-game'),
     path('gift-pairs/<int:group_id>/', GiftPairs.as_view(), name='gift-pairs'),
+    path('my-games/', MyGamesView.as_view, name='my-games'),
+    path('register/', RegisterView.as_view(), name='register'),
 ]

@@ -9,10 +9,12 @@
     
     <ul>
         {% for gift_pair in gift_pairs %}
-            <li>
+            <p>
+                Event: {{ gift_pair.event }} For group: {{ gift_pair.group }} Date: {{ group.date }}
+                <li>
                 Giver: {{ gift_pair.giver }} -> Receiver: {{ gift_pair.receiver }}
-                (In group: {{ gift_pair.group }} for event: {{ gift_pair.event }})
-            </li>
+                </li>
+            </p>
         {% endfor %}
     </ul>
 </body>

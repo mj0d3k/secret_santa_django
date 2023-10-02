@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+
     <form method="post">
         {% csrf_token %}
         <label for="username">Username:</label>
@@ -10,8 +11,11 @@
         <input type="password" id="password" name="password" required>
         <br>
         <input type="submit" value="Zaloguj">
+        <p> You don't have an account yet?</p> <a href="/register/">Register</a>
     </form>
     
 
 
-    {% endblock %}
+{% endblock %}
+{% block footer %}
+{% endblock %}

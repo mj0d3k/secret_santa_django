@@ -59,7 +59,7 @@
             <li>{{ group.name }} | {{ group.exchange_date }} | {{ group.price_limit }} | {{ group.creator }}</li>
             <a href="/edit-group/{{ group.id }}/">Edit</a>
             <a href="/delete-group/{{ group.id }}/">Delete</a>
-            <!-- <a href="/gift-pairs/{{ group.id }}/">Show games</a> -->
+            <a href="/gift-pairs/{{ group.id }}/">Show games</a>
             <ul>
                 {% for participant in group.participants.all %}
                     <li>{{ participant.name }} | {{ participant.email }} | {{ participant.wishlist }}</li>
@@ -90,7 +90,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        const revealButtons = document.querySelectorAll('.reveal-button');
+    const revealButtons = document.querySelectorAll('.reveal-button');
         revealButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const groupName = button.getAttribute('data-group');
@@ -103,6 +103,7 @@
             });
         });
     });
+
 </script>
 
 {% block footer %}

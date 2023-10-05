@@ -247,11 +247,11 @@ class DeletePlayerView(View):
 
 class GameView(View):
     def get(self, request):
-        form = GameForm()
+        form = GameForm(user=request.user)
         return render(request, 'game.html', {'form': form})
 
     def post(self, request):
-        form = GameForm(request.POST)
+        form = GameForm(request.POST, user=request.user)
         if form.is_valid():
             event = form.cleaned_data['event']
             group = form.cleaned_data['group']

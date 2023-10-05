@@ -2,6 +2,7 @@ from django import forms
 from .models import Event, Group, Participant
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 
 CURRENCY_CHOICES = [
@@ -53,15 +54,6 @@ class QucikGameForm(forms.Form):
     date = forms.DateField(label='Date', widget=forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'}))
 
 
-# class EventForm(forms.ModelForm):
-#     class Meta:
-#         model = Event
-#         fields = '__all__'
-#         widgets = {
-#             'date': forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'}),
-#         }
-
-
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
@@ -76,15 +68,6 @@ class EventForm(forms.ModelForm):
         super(EventForm, self).__init__(*args, **kwargs)
         if user:
             self.initial['organizer'] = user
-
-
-# class GroupForm(forms.ModelForm):
-#     class Meta:
-#         model = Group
-#         fields = '__all__'
-#         widgets = {
-#             'exchange_date': forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'}),
-#         }
 
 
 class GroupForm(forms.ModelForm):
@@ -103,11 +86,13 @@ class GroupForm(forms.ModelForm):
             self.initial['creator'] = user
             self.fields['participants'].queryset = Participant.objects.filter(creator=user)
 
+    # checking if group contains at least 3 participants
 
-# class ParticipantForm(forms.ModelForm):
-#     class Meta:
-#         model = Participant
-#         fields = '__all__'
+    def clean(self):
+        cleaned_data = super().clean()
+        participants = cleaned_data.get('participants')
+        if participants and len(participants) < 3:
+            raise ValidationError('Every group must contain at least 3 players.')
 
 
 class ParticipantForm(forms.ModelForm):
@@ -126,8 +111,13 @@ class ParticipantForm(forms.ModelForm):
 
 
 class GameForm(forms.Form):
-    event = forms.ModelChoiceField(queryset=Event.objects.all())
-    group = forms.ModelChoiceField(queryset=Group.objects.all())
+    def __init__(self, user, *args, **kwargs):
+        super(GameForm, self).__init__(*args, **kwargs)
+        self.fields['event'].queryset = Event.objects.filter(organizer=user)
+        self.fields['group'].queryset = Group.objects.filter(creator=user)
+
+    event = forms.ModelChoiceField(queryset=Event.objects.none())
+    group = forms.ModelChoiceField(queryset=Group.objects.none())
     date = forms.DateField(widget=forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'}))
 
 

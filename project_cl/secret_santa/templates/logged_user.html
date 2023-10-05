@@ -97,8 +97,10 @@
                 const groupContainer = button.parentElement.querySelector('.hidden');
                 if (groupContainer.style.display === 'none' || groupContainer.style.display === '') {
                     groupContainer.style.display = 'block';
+                    button.textContent = 'Hide'; // Change button text to "Hide"
                 } else {
                     groupContainer.style.display = 'none';
+                    button.textContent = 'Reveal'; // Change button text back to "Reveal"
                 }
             });
         });

@@ -24,28 +24,26 @@
         }
     </style>
 
-    <h1>our created events:</h1>
+    <h1>Gift Pair List</h1>
 
-    {% regroup gift_pairs by event as event_list %}
+        {% regroup gift_pairs by event as event_list %}
 
-    {% for event in event_list %}
-        <h2>Event: {{ event.grouper.name }}</h2>
-        <ul>
+        {% for event in event_list %}
+            <h2>Event: {{ event.grouper.name }}</h2>
             {% regroup event.list by group as group_list %}
-
             {% for group in group_list %}
-                <h3>Group: {{ group.grouper.name }} for date: {{ group.list.0.event.date }}</h3>
-                <li>
-                    <button class="reveal-button" data-group="{{ group.grouper.name }}">Reveal</button>
-                    <ul class="hidden" data-group="{{ group.grouper.name }}" style="display: none;">
+                <div class="group-container">
+                    <h3>Group: {{ group.grouper.name }} for date: {{ group.list.0.date }}</h3>
+                    <ul class="hidden" style="display: none;">
                         {% for pair in group.list %}
                             <li>Giver: {{ pair.giver.name }} -> Receiver: {{ pair.receiver.name }}</li>
                         {% endfor %}
                     </ul>
-                </li>
+                    <button class="reveal-button" data-group="{{ group.grouper.name }}">Reveal</button>
+                </div>
             {% endfor %}
-        </ul>
-    {% endfor %}
+        {% endfor %}
+
 
     <a href="/new-game/">Create new game</a>
 
@@ -65,7 +63,7 @@
             <li>{{ group.name }} | {{ group.exchange_date }} | {{ group.price_limit }} | {{ group.creator }}</li>
             <a href="/edit-group/{{ group.id }}/">Edit</a>
             <a href="/delete-group/{{ group.id }}/">Delete</a>
-            <a href="/gift-pairs/{{ group.id }}/">Show games</a>
+            <!-- <a href="/gift-pairs/{{ group.id }}/">Show games</a> -->
             <ul>
                 {% for participant in group.participants.all %}
                     <li>{{ participant.name }} | {{ participant.email }} | {{ participant.wishlist }}</li>
@@ -92,20 +90,19 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-    const revealButtons = document.querySelectorAll('.reveal-button');
+        const revealButtons = document.querySelectorAll('.reveal-button');
         revealButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const groupName = button.getAttribute('data-group');
-                const giftPairList = document.querySelector(`ul[data-group="${groupName}"]`);
-                if (giftPairList.style.display === 'none' || giftPairList.style.display === '') {
-                    giftPairList.style.display = 'block';
+                const groupContainer = button.parentElement.querySelector('.hidden');
+                if (groupContainer.style.display === 'none' || groupContainer.style.display === '') {
+                    groupContainer.style.display = 'block';
                 } else {
-                    giftPairList.style.display = 'none';
+                    groupContainer.style.display = 'none';
                 }
             });
         });
     });
-
 </script>
 
 {% endblock %}

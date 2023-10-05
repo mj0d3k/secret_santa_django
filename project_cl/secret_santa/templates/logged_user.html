@@ -18,14 +18,28 @@
 
 <div class="main content">
 
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+
     <h1>Your created games</h1>
 
-    {% for pair in gift_pairs %}
-        <h2>Event: {{ pair.event.name }}</h2>
-        <ul>
-            <!-- {% for %} -->
+    {% for event in events_with_draws %}
+        <h2>
+            Event: {{ event.name }}
+            <button class="reveal-button">Reveal</button>
+        </h2>
+        <ul class="hidden">
+            {% for pair in event.giftpair_set.all %}
+                <h3>Group: {{ pair.group.name }} Date: {{ pair.date }}</h3>
+                <li>
+                    <p>Giver: {{ pair.giver.name }} -> Receiver: {{ pair.receiver.name }}</p>
+                </li>
+            {% endfor %}
         </ul>
-
+    {% endfor %}
 
     <a href="/new-game/">Create new game</a>
 
@@ -69,6 +83,25 @@
     <a href="/my-gift-pairs/">shuffles I participate in</a>
 
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const buttons = document.querySelectorAll('.reveal-button');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                const ul = button.parentElement.nextElementSibling;
+                if (ul.style.display === 'none' || ul.style.display === '') {
+                    ul.style.display = 'block';
+                    button.textContent = 'Hide';
+                } else {
+                    ul.style.display = 'none';
+                    button.textContent = 'Reveal';
+                }
+            });
+        });
+    });
+</script>
 
 {% endblock %}
 

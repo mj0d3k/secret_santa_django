@@ -71,16 +71,6 @@ class LoggedUserView(View): # does not fully work
         })
 
 
-# class LoggedUserView(View):
-#     def get(self, request):
-#         user = request.user
-#         events_with_draws = Event.objects.filter(giftpair__isnull=False, organizer=user).distinct()
-#         return render(request, "logged_user.html", {
-#             'user': user,
-#             'events_with_draws': events_with_draws,
-#         })
-
-
 class QuickGameView(View):
     def get(self, request):
         form = QucikGameForm()

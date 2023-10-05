@@ -24,18 +24,24 @@
         }
     </style>
 
-    <h1>Your created games</h1>
+    <h1>our created events:</h1>
 
-    {% for event in events_with_draws %}
-        <h2>
-            Event: {{ event.name }}
-            <button class="reveal-button">Reveal</button>
-        </h2>
-        <ul class="hidden">
-            {% for pair in event.giftpair_set.all %}
-                <h3>Group: {{ pair.group.name }} Date: {{ pair.date }}</h3>
+    {% regroup gift_pairs by event as event_list %}
+
+    {% for event in event_list %}
+        <h2>Event: {{ event.grouper.name }}</h2>
+        <ul>
+            {% regroup event.list by group as group_list %}
+
+            {% for group in group_list %}
+                <h3>Group: {{ group.grouper.name }} for date: {{ group.list.0.event.date }}</h3>
                 <li>
-                    <p>Giver: {{ pair.giver.name }} -> Receiver: {{ pair.receiver.name }}</p>
+                    <button class="reveal-button" data-group="{{ group.grouper.name }}">Reveal</button>
+                    <ul class="hidden" data-group="{{ group.grouper.name }}" style="display: none;">
+                        {% for pair in group.list %}
+                            <li>Giver: {{ pair.giver.name }} -> Receiver: {{ pair.receiver.name }}</li>
+                        {% endfor %}
+                    </ul>
                 </li>
             {% endfor %}
         </ul>
@@ -85,22 +91,21 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const buttons = document.querySelectorAll('.reveal-button');
-
-        buttons.forEach(button => {
+    document.addEventListener('DOMContentLoaded', function () {
+    const revealButtons = document.querySelectorAll('.reveal-button');
+        revealButtons.forEach(button => {
             button.addEventListener('click', () => {
-                const ul = button.parentElement.nextElementSibling;
-                if (ul.style.display === 'none' || ul.style.display === '') {
-                    ul.style.display = 'block';
-                    button.textContent = 'Hide';
+                const groupName = button.getAttribute('data-group');
+                const giftPairList = document.querySelector(`ul[data-group="${groupName}"]`);
+                if (giftPairList.style.display === 'none' || giftPairList.style.display === '') {
+                    giftPairList.style.display = 'block';
                 } else {
-                    ul.style.display = 'none';
-                    button.textContent = 'Reveal';
+                    giftPairList.style.display = 'none';
                 }
             });
         });
     });
+
 </script>
 
 {% endblock %}

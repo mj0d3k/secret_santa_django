@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Results for {{ user_email }}</h1>
+<h1>Results for {{ participant.name }}</h1>
 <ul>
     {% for gift_pair in gift_pairs %}
         <li>
@@ -13,5 +13,6 @@
     {% empty %}
         <li>No gift pairs found.</li>
     {% endfor %}
+
 </ul>
 {% endblock %}

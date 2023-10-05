@@ -315,7 +315,7 @@ class GameView(View):
             return HttpResponse("error")
 
 
-class GiftPairs(View):
+class GiftPairs(View): # hopefully will not be needed
     def get(self, request, group_id):
         group = get_object_or_404(Group, pk=group_id)
         gift_pairs = GiftPair.objects.filter(group=group)
@@ -362,7 +362,7 @@ class MyGiftPairsView(View):
         return render(request, 'my_gift_pairs.html', {'gift_pairs': gift_pairs, 'today': today})
 
 
-class LookupView(View): # does not work
+class LookupView(View):
     def get(self, requst):
         form = EmailLookupForm()
         return render(requst, 'lookup.html', {'form': form})
@@ -371,19 +371,19 @@ class LookupView(View): # does not work
         form = EmailLookupForm(request.POST)
         if form.is_valid():
             user_email = form.cleaned_data['email']
-            try: 
+            try:
                 participant = Participant.objects.get(email=user_email)
                 gift_pairs = GiftPair.objects.filter(giver=participant)
-            except Participant.DoesNotExist:
+            except participant.DoesNotExist:
                 gift_pairs = []
 
-            return render(request, 'my_gift_pairs.html', {'gift_pairs': gift_pairs})
+            # return render(request, 'my_gift_pairs.html', {'gift_pairs': gift_pairs})
+            return render(request, 'lookup_result.html', {'gift_pairs': gift_pairs})
 
         return render(request, 'lookup.html', {'form': form})
 
 # TO DO:
 # gift pairs on logged view does not work
-# look up result does not work
 
 # validaton
 # desgin + description

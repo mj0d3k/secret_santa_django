@@ -3,6 +3,7 @@ from .models import Event, Group, Participant
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.contrib.auth.forms import PasswordResetForm
 
 
 CURRENCY_CHOICES = [
@@ -133,3 +134,11 @@ class RegisterForm(UserCreationForm):
 
 class EmailLookupForm(forms.Form):
     email = forms.EmailField(label='Enter your email', required=True)
+
+
+class CustomPasswordResetForm(PasswordResetForm):
+    email = forms.EmailField(
+        label="Your Email",
+        max_length=254,
+        widget=forms.EmailInput(attrs={'autocomplete': 'email', 'class': 'form-control'})
+    )

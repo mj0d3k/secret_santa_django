@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from secret_santa import views
+from django.contrib.auth import views as auth_views
 from secret_santa.views import (MainView,
                                 QuickGameView,
                                 LoginView,
@@ -35,7 +36,8 @@ from secret_santa.views import (MainView,
                                 GiftPairs,
                                 ChangePassword,
                                 MyGiftPairsView,
-                                LookupView,)
+                                LookupView,
+                                CustomPasswrordResetView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -60,4 +62,6 @@ urlpatterns = [
     path('delete-account/<int:pk>/', views.DeleteAccountView.as_view(), name='delete_account'),
     path('my-gift-pairs/', MyGiftPairsView.as_view(), name='my-gift-pairs'),
     path('email-lookup/', LookupView.as_view(), name='email-lookup'),
+    # path('reset-password/', CustomPasswrordResetView.as_view(), name='reset-pswrd'),
+    # path('reset-password/confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
 ]

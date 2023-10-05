@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views import View
-from .forms import EmailLookupForm, EventForm, GameForm, GroupForm, ParticipantForm, QucikGameForm, RegisterForm
+from .forms import CustomPasswordResetForm, EmailLookupForm, EventForm, GameForm, GroupForm, ParticipantForm, QucikGameForm, RegisterForm
 from .models import Event, GiftPair, Group, Participant
 import random
 from django.conf import settings
@@ -363,24 +363,57 @@ class LookupView(View):
 
         return render(request, 'lookup.html', {'form': form})
 
-# TO DO:
-# create special gmail account
+
+class CustomPasswrordResetView(View):
+    form_class = CustomPasswordResetForm
+    template_name = 'reset_password.html'
+    success_url = 'login'
+
+    def get(self, request):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.save(request=request)
+            return redirect(self.success_url)
+        else:
+            return HttpResponse("error")
+    # def post(self, request):
+    #     form = self.form_class(request.POST)
+    #     if form.is_valid():
+    #         email = form.cleaned_data['email']
+    #         subject = 'Reset Password'
+    #         message = 'Please click the link below to reset your password:\n'
+    #         reset_url = f'http://example.com/reset-password/confirm/{email}/'
+    #         message += reset_url
+    #         email_from = settings.EMAIL_HOST_USER
+    #         recipient_list = [email]
+    #         send_mail(subject, message, email_from, recipient_list)
+    #         return redirect(self.success_url)
+
+
+
+########### TO DO ############
+
+# MUST DO:
 # event names apprear more than once
-# menu on logged user (part of design)
-
-
-
 # tests
 # validaton
 # documentation
-
-# ability to load cvs
-# load screen when playing game
-# desgin + description
-# buttns if necesery
 # reset password
-# in event group and player add creator automatically
-# custom messages
-# what about people who want to check their games, but it was quick game and it is not saved in db? maybe model for quick game in db will solve it
-# is model group even necessery? i can add more data fields to game form - but it is not very important
+
+
+# MUST BUT NOT FIRST PRIO:
+# create special gmail account
 # python anywhere
+# menu on logged user (part of design)
+# ability to load cvs
+# desgin + description CLEAN UP + btns on pages
+# custom messages
+
+# NOT NECESSERY:
+# load screen when playing game
+# is model group even necessery? i can add more data fields to game form - but it is not very important
+# what about people who want to check their games, but it was quick game and it is not saved in db? maybe model for quick game in db will solve it

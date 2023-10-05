@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 
 class Event(models.Model):
     name = models.CharField(max_length=64)
-    #date = models.DateField() # chyba jednak to do kosza
     description = models.TextField()
     organizer = models.ForeignKey(User, on_delete=models.CASCADE) # one:many relationship
 
@@ -79,9 +78,7 @@ class Group(models.Model):
 
     name = models.CharField(max_length=64)
     creator = models.ForeignKey(User, on_delete=models.CASCADE, default=1) # one:many relationship
-    #event = models.ForeignKey(Event, on_delete=models.CASCADE) # one:many relationship
     participants = models.ManyToManyField(Participant) # many:many relationship
-    #exchange_date = models.DateField() #chyba do wyrzucenia, dodac date w forms losowania gry!!!
     price_limit = models.DecimalField(max_digits=6, decimal_places=2)
     currency = models.CharField(
         max_length=3,

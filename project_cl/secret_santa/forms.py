@@ -53,22 +53,38 @@ class QucikGameForm(forms.Form):
     date = forms.DateField(label='Date', widget=forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'}))
 
 
+# class EventForm(forms.ModelForm):
+#     class Meta:
+#         model = Event
+#         fields = '__all__'
+#         widgets = {
+#             'date': forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'}),
+#         }
+
+
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = '__all__'
         widgets = {
             'date': forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'}),
+            'organizer': forms.HiddenInput(),
         }
 
-# class EventForm(forms.Form):
-#     name = forms.CharField(max_length=64)
-#     description = forms.CharField(widget=forms.Textarea)
-#     date = forms.DateField(widget=forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'}))
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(EventForm, self).__init__(*args, **kwargs)
+        if user:
+            self.initial['organizer'] = user
 
+
+# class GroupForm(forms.ModelForm):
 #     class Meta:
-#         model = Event
-#         fields = ['name', 'description', 'date']
+#         model = Group
+#         fields = '__all__'
+#         widgets = {
+#             'exchange_date': forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'}),
+#         }
 
 
 class GroupForm(forms.ModelForm):
@@ -77,13 +93,36 @@ class GroupForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'exchange_date': forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'}),
+            'creator': forms.HiddenInput(),
         }
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(GroupForm, self).__init__(*args, **kwargs)
+        if user:
+            self.initial['creator'] = user
+            self.fields['participants'].queryset = Participant.objects.filter(creator=user)
+
+
+# class ParticipantForm(forms.ModelForm):
+#     class Meta:
+#         model = Participant
+#         fields = '__all__'
 
 
 class ParticipantForm(forms.ModelForm):
     class Meta:
         model = Participant
         fields = '__all__'
+        widgets = {
+            'creator': forms.HiddenInput(),
+        }
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(ParticipantForm, self).__init__(*args, **kwargs)
+        if user:
+            self.initial['creator'] = user
 
 
 class GameForm(forms.Form):

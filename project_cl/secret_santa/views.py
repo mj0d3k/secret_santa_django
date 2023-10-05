@@ -6,17 +6,17 @@ from django.views import View
 from .forms import EmailLookupForm, EventForm, GameForm, GroupForm, ParticipantForm, QucikGameForm, RegisterForm
 from .models import Event, GiftPair, Group, Participant
 import random
-# import smtplib
-# from email.mime.text import MIMEText
 from django.conf import settings
 from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import PasswordChangeView
 from django.views.generic.edit import DeleteView
-from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+# from django.contrib import messages
+# from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 
 class MainView(View):
@@ -53,13 +53,13 @@ class BaseView(View): # this view is just temporary - will be deleted later
         return render(request, "base.html", {'user': user}) # base meaning logged user view - main view for logged user!
 
 
-class LoggedUserView(View): # does not fully work
+class LoggedUserView(View):
     def get(self, request):
-        gift_pairs = GiftPair.objects.all()
         user = request.user
         events = Event.objects.filter(organizer=user)
         groups = Group.objects.filter(creator=user)
         players = Participant.objects.filter(creator=user)
+        gift_pairs = GiftPair.objects.filter(event__organizer=user)
         events_with_draws = Event.objects.filter(giftpair__in=gift_pairs).distinct()
         return render(request, "logged_user.html", {
             'user': user,
@@ -96,8 +96,6 @@ class QuickGameView(View):
         else:
             return HttpResponse("error")
 
-        # maybe add custon message that user can see when inputing
-        # when email spelled incoreccly by user - need a msg but there is a problem because it is JS not forms!!!
         # valitation error - need to add it to forms.py
 
 
@@ -121,13 +119,14 @@ def secret_santa(participants, max_price, currency, date):
         # many mails sending is time consuming - work on this later
 
 
+@method_decorator(login_required, name='dispatch')
 class AddEventView(View):
     def get(self, request):
-        form = EventForm()
+        form = EventForm(user=request.user)
         return render(request, 'add_event.html', {'form': form})
 
     def post(self, request):
-        form = EventForm(request.POST)
+        form = EventForm(request.POST, user=request.user)
         if form.is_valid():
             form.save()
             return redirect('base')
@@ -135,35 +134,15 @@ class AddEventView(View):
             return HttpResponse("error")
 
 
-# class AddEventView(View):
-#     def get(self, request):
-#         form = EventForm()
-#         return render(request, 'add_event.html', {'form': form})
-
-#     def post(self, request):
-#         form = EventForm(request.POST)
-#         if form.is_valid():
-#             event = Event(
-#                 name=form.cleaned_data['name'],
-#                 description=form.cleaned_data['description'],
-#                 date=form.cleaned_data['date'],
-#                 organizer=request.user,
-#             )
-#             event.save()
-#             return redirect('base')
-#         else:
-#             return render(request, 'add_event.html', {'form': form})
-
-
 class EditEventView(View):
     def get(self, request, event_id):
         event = Event.objects.get(pk=event_id)
-        form = EventForm(instance=event)
+        form = EventForm(instance=event, user=request.user)
         return render(request, 'edit_event.html', {'form': form})
 
     def post(self, request, event_id):
         event = Event.objects.get(pk=event_id)
-        form = EventForm(request.POST, instance=event)
+        form = EventForm(request.POST, instance=event, user=request.user)
         if form.is_valid():
             form.save()
             return redirect('base')
@@ -182,15 +161,17 @@ class DeleteEventView(View):
         return redirect('base')
 
 
+@method_decorator(login_required, name='dispatch')
 class AddGroupView(View):
     def get(self, request):
-        form = GroupForm()
+        form = GroupForm(user=request.user)
         return render(request, 'add_group.html', {'form': form})
 
     def post(self, request):
-        form = GroupForm(request.POST)
+        form = GroupForm(request.POST, user=request.user)
         if form.is_valid():
             form.save()
+            # group = form.save()
             return redirect('base')
         else:
             return HttpResponse("error")
@@ -199,12 +180,12 @@ class AddGroupView(View):
 class EditGroupView(View):
     def get(self, request, group_id):
         group = Group.objects.get(pk=group_id)
-        form = GroupForm(instance=group)
+        form = GroupForm(instance=group, user=request.user)
         return render(request, 'edit_group.html', {'form': form})
 
     def post(self, request, group_id):
         group = Group.objects.get(pk=group_id)
-        form = GroupForm(request.POST, instance=group)
+        form = GroupForm(request.POST, instance=group, user=request.user)
         if form.is_valid():
             form.save()
             return redirect('base')
@@ -225,11 +206,11 @@ class DeleteGroupView(View):
 
 class AddPlayerView(View):
     def get(self, request):
-        form = ParticipantForm()
+        form = ParticipantForm(user=request.user)
         return render(request, 'add_player.html', {'form': form})
 
     def post(self, request):
-        form = ParticipantForm(request.POST)
+        form = ParticipantForm(request.POST, user=request.user)
         if form.is_valid():
             form.save()
             return redirect('base')
@@ -240,12 +221,12 @@ class AddPlayerView(View):
 class EditPlayerView(View):
     def get(self, request, player_id):
         player = Participant.objects.get(pk=player_id)
-        form = ParticipantForm(instance=player)
+        form = ParticipantForm(instance=player, user=request.user)
         return render(request, 'edit_player.html', {'form': form})
 
     def post(self, request, player_id):
         player = Participant.objects.get(pk=player_id)
-        form = ParticipantForm(request.POST, instance=player)
+        form = ParticipantForm(request.POST, instance=player, user=request.user)
         if form.is_valid():
             form.save()
             return redirect('base')
@@ -388,9 +369,13 @@ class LookupView(View):
 # menu on logged user (part of design)
 
 
+
+# tests
+# validaton
+# documentation
+
 # ability to load cvs
 # load screen when playing game
-# validaton
 # desgin + description
 # buttns if necesery
 # reset password
@@ -399,5 +384,3 @@ class LookupView(View):
 # what about people who want to check their games, but it was quick game and it is not saved in db? maybe model for quick game in db will solve it
 # is model group even necessery? i can add more data fields to game form - but it is not very important
 # python anywhere
-# tests
-# documentation

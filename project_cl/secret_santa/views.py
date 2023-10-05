@@ -384,6 +384,7 @@ class LookupView(View):
 
 # TO DO:
 # gift pairs on logged view does not work
+# create special gmail account
 
 # validaton
 # desgin + description

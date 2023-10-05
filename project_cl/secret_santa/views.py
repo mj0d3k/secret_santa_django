@@ -383,9 +383,13 @@ class LookupView(View):
         return render(request, 'lookup.html', {'form': form})
 
 # TO DO:
-# gift pairs on logged view does not work
 # create special gmail account
+# event names apprear more than once
+# menu on logged user (part of design)
 
+
+# ability to load cvs
+# load screen when playing game
 # validaton
 # desgin + description
 # buttns if necesery
@@ -394,7 +398,6 @@ class LookupView(View):
 # custom messages
 # what about people who want to check their games, but it was quick game and it is not saved in db? maybe model for quick game in db will solve it
 # is model group even necessery? i can add more data fields to game form - but it is not very important
-# settings!! ZMIENNE ŚRODOWISKOWE
 # python anywhere
 # tests
 # documentation

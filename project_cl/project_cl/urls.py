@@ -36,8 +36,7 @@ from secret_santa.views import (MainView,
                                 GiftPairs,
                                 ChangePassword,
                                 MyGiftPairsView,
-                                LookupView,
-                                CustomPasswrordResetView)
+                                LookupView,)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

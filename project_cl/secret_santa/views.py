@@ -3,7 +3,9 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views import View
-from .forms import CustomPasswordResetForm, EmailLookupForm, EventForm, GameForm, GroupForm, ParticipantForm, QucikGameForm, RegisterForm
+from .forms import (CustomPasswordResetForm, EmailLookupForm, EventForm,
+                    GameForm, GroupForm, ParticipantForm,
+                    QucikGameForm, RegisterForm)
 from .models import Event, GiftPair, Group, Participant
 import random
 from django.conf import settings
@@ -11,8 +13,6 @@ from django.core.mail import send_mail
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import PasswordChangeView
 from django.views.generic.edit import DeleteView
-# from django.contrib import messages
-# from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.decorators import login_required
@@ -20,55 +20,12 @@ from django.utils.decorators import method_decorator
 
 
 class MainView(View):
+    """
+    First view after entering the website.
+
+    """
     def get(self, request):
         return render(request, 'index.html')
-
-
-class LoginView(View):
-    def get(self, request):
-        if request.user.is_authenticated:
-            return redirect('base')
-        return render(request, "login_user_view.html")
-
-    def post(self, request):
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('base')
-        else:
-            return HttpResponse("error")
-
-
-class LogoutView(View):
-    def get(self, request):
-        logout(request)
-        return render(request, "index.html")
-
-
-class BaseView(View): # this view is just temporary - will be deleted later
-    def get(self, request):
-        user = request.user
-        return render(request, "base.html", {'user': user}) # base meaning logged user view - main view for logged user!
-
-
-class LoggedUserView(View):
-    def get(self, request):
-        user = request.user
-        events = Event.objects.filter(organizer=user)
-        groups = Group.objects.filter(creator=user)
-        players = Participant.objects.filter(creator=user)
-        gift_pairs = GiftPair.objects.filter(event__organizer=user)
-        events_with_draws = Event.objects.filter(giftpair__in=gift_pairs).distinct()
-        return render(request, "logged_user.html", {
-            'user': user,
-            'events': events,
-            'groups': groups,
-            'players': players,
-            'gift_pairs': gift_pairs,
-            'events_with_draws': events_with_draws,
-        })
 
 
 class QuickGameView(View):
@@ -119,6 +76,73 @@ def secret_santa(participants, max_price, currency, date):
         # many mails sending is time consuming - work on this later
 
 
+class LoginView(View):
+    def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('base')
+        return render(request, "login_user_view.html")
+
+    def post(self, request):
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('base')
+        else:
+            return HttpResponse("error")
+
+
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return render(request, "index.html")
+
+
+class ChangePassword(PasswordChangeView):
+    template_name = 'change_password.html'
+    success_url = '/login/'
+
+
+class DeleteAccountView(SuccessMessageMixin, DeleteView):
+    model = User
+    template_name = 'user_delete_confirm.html'
+    success_message = 'Your account has been deleted.'
+    success_url = reverse_lazy('index')
+
+
+def register(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = RegisterForm()
+    return render(request, 'register.html', {'form': form})
+
+
+class LoggedUserView(View):
+    def get(self, request):
+        user = request.user
+        events = Event.objects.filter(organizer=user)
+        groups = Group.objects.filter(creator=user)
+        players = Participant.objects.filter(creator=user)
+        gift_pairs = GiftPair.objects.filter(event__organizer=user)
+        events_with_draws = Event.objects.filter(giftpair__in=gift_pairs).distinct()
+        return render(request, "logged_user.html", {
+            'user': user,
+            'events': events,
+            'groups': groups,
+            'players': players,
+            'gift_pairs': gift_pairs,
+            'events_with_draws': events_with_draws,
+        })
+
+
+### EVENT SECTION ###
+
+
 @method_decorator(login_required, name='dispatch')
 class AddEventView(View):
     def get(self, request):
@@ -159,6 +183,10 @@ class DeleteEventView(View):
         event = get_object_or_404(Event, pk=event_id)
         event.delete()
         return redirect('base')
+
+
+
+### GROUP SECTION ###
 
 
 @method_decorator(login_required, name='dispatch')
@@ -204,6 +232,9 @@ class DeleteGroupView(View):
         return redirect('base')
 
 
+### PLAYER SECTION ###
+
+
 class AddPlayerView(View):
     def get(self, request):
         form = ParticipantForm(user=request.user)
@@ -243,6 +274,9 @@ class DeletePlayerView(View):
         player = get_object_or_404(Participant, pk=player_id)
         player.delete()
         return redirect('base')
+
+
+### MAIN GAME SECTION ###
 
 
 class GameView(View):
@@ -296,36 +330,6 @@ class GameView(View):
             return HttpResponse("error")
 
 
-class GiftPairs(View): # hopefully will not be needed
-    def get(self, request, group_id):
-        group = get_object_or_404(Group, pk=group_id)
-        gift_pairs = GiftPair.objects.filter(group=group)
-        return render(request, 'gift_pairs.html', {'gift_pairs': gift_pairs})
-
-
-def register(request):
-    if request.method == 'POST':
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('login')
-    else:
-        form = RegisterForm()
-    return render(request, 'register.html', {'form': form})
-
-
-class ChangePassword(PasswordChangeView):
-    template_name = 'change_password.html'
-    success_url = '/login/'
-
-
-class DeleteAccountView(SuccessMessageMixin, DeleteView):
-    model = User
-    template_name = 'user_delete_confirm.html'
-    success_message = 'Your account has been deleted.'
-    success_url = reverse_lazy('index')
-
-
 class MyGiftPairsView(View):
     def get(self, request):
         today = date.today()
@@ -364,6 +368,51 @@ class LookupView(View):
         return render(request, 'lookup.html', {'form': form})
 
 
+
+########### TO DO ############
+
+# MUST DO:
+# event names apprear more than once
+# tests
+# validaton
+# documentation
+# delet Gift model and migrate
+
+
+# MUST BUT NOT FIRST PRIO:
+# create special gmail account
+# python anywhere
+# menu on logged user (part of design)
+# ability to load cvs
+# desgin + description CLEAN UP + btns on pages
+# custom messages
+
+
+# NOT NECESSERY:
+# load screen when playing game
+# reset password
+# is model group even necessery? i can add more data fields to game form - but it is not very important
+# what about people who want to check their games, but it was quick game and it is not saved in db? maybe model for quick game in db will solve it
+
+
+
+# views that are no longer needed
+
+"""class GiftPairs(View): # hopefully will not be needed
+    def get(self, request, group_id):
+        group = get_object_or_404(Group, pk=group_id)
+        gift_pairs = GiftPair.objects.filter(group=group)
+        return render(request, 'gift_pairs.html', {'gift_pairs': gift_pairs})
+
+
+class BaseView(View): # this view is just temporary - will be deleted later
+    def get(self, request):
+        user = request.user
+        return render(request, "base.html", {'user': user}) # base meaning logged user view - main view for logged user!
+
+this view is probably not needed at this stage
+
+
 class CustomPasswrordResetView(View):
     form_class = CustomPasswordResetForm
     template_name = 'reset_password.html'
@@ -380,40 +429,16 @@ class CustomPasswrordResetView(View):
             return redirect(self.success_url)
         else:
             return HttpResponse("error")
-    # def post(self, request):
-    #     form = self.form_class(request.POST)
-    #     if form.is_valid():
-    #         email = form.cleaned_data['email']
-    #         subject = 'Reset Password'
-    #         message = 'Please click the link below to reset your password:\n'
-    #         reset_url = f'http://example.com/reset-password/confirm/{email}/'
-    #         message += reset_url
-    #         email_from = settings.EMAIL_HOST_USER
-    #         recipient_list = [email]
-    #         send_mail(subject, message, email_from, recipient_list)
-    #         return redirect(self.success_url)
-
-
-
-########### TO DO ############
-
-# MUST DO:
-# event names apprear more than once
-# tests
-# validaton
-# documentation
-# reset password
-
-
-# MUST BUT NOT FIRST PRIO:
-# create special gmail account
-# python anywhere
-# menu on logged user (part of design)
-# ability to load cvs
-# desgin + description CLEAN UP + btns on pages
-# custom messages
-
-# NOT NECESSERY:
-# load screen when playing game
-# is model group even necessery? i can add more data fields to game form - but it is not very important
-# what about people who want to check their games, but it was quick game and it is not saved in db? maybe model for quick game in db will solve it
+    different approach - not working    
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            subject = 'Reset Password'
+            message = 'Please click the link below to reset your password:\n'
+            reset_url = f'http://example.com/reset-password/confirm/{email}/'
+            message += reset_url
+            email_from = settings.EMAIL_HOST_USER
+            recipient_list = [email]
+            send_mail(subject, message, email_from, recipient_list)
+            return redirect(self.success_url)"""

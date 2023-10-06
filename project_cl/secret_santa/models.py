@@ -26,10 +26,10 @@ class Participant(models.Model):
         return self.name
 
 
-class Gift(models.Model): # WILL BE DELETED LATER PROPABLY?
-    name = models.CharField(max_length=64)
-    receiver = models.ForeignKey(Participant, on_delete=models.CASCADE)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+# class Gift(models.Model): # WILL BE DELETED LATER PROPABLY?
+#     name = models.CharField(max_length=64)
+#     receiver = models.ForeignKey(Participant, on_delete=models.CASCADE)
+#     event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
 
 class Group(models.Model):

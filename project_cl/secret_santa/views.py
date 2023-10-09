@@ -215,10 +215,17 @@ class AddEventView(View):
         except Exception as e:
             return HttpResponse(f"Erorr occured: {e}. Please try again.")
 
-        return HttpResponse(f"Erorr occured: {e}. Please try again.")
+        return HttpResponse("An error occurred. Please try again.")
 
 
 class EditEventView(View):
+    """
+    View for editing existing events.
+
+    Methods:
+        - get(self, request, event_id): Handles GET requests and renders the edit_event.html template.
+        - post(self, request, event_id): Handles POST requests and processes the event data,
+    """
     def get(self, request, event_id):
         event = Event.objects.get(pk=event_id)
         form = EventForm(instance=event, user=request.user)
@@ -227,23 +234,35 @@ class EditEventView(View):
     def post(self, request, event_id):
         event = Event.objects.get(pk=event_id)
         form = EventForm(request.POST, instance=event, user=request.user)
-        if form.is_valid():
-            form.save()
-            return redirect('base')
-        else:
-            return HttpResponse("error")
+        try:
+            if form.is_valid():
+                form.save()
+                return redirect('base')
+        except Exception as e:
+            return HttpResponse(f"Erorr occured: {e}. Please try again.")
+
+        return HttpResponse("An error occurred. Please try again.")
 
 
 class DeleteEventView(View):
+    """
+    View for deleting existing events.
+
+    Methods:
+        - get(self, request, event_id): Handles GET requests and renders the event_delete.html template.
+        - post(self, request, event_id): Handles POST requests and deletes the event.
+    """
     def get(self, request, event_id):
         event = get_object_or_404(Event, pk=event_id)
         return render(request, 'event_delete.html', {'event': event})
 
     def post(self, request, event_id):
-        event = get_object_or_404(Event, pk=event_id)
-        event.delete()
-        return redirect('base')
-
+        try:
+            event = get_object_or_404(Event, pk=event_id)
+            event.delete()
+            return redirect('base')
+        except Exception as e:
+            return HttpResponse(f"An error occurred: {e}. Please try again.")
 
 
 ### GROUP SECTION ###
@@ -251,95 +270,157 @@ class DeleteEventView(View):
 
 @method_decorator(login_required, name='dispatch')
 class AddGroupView(View):
+    """
+    View for adding new groups.
+
+    Methods:
+        - get(self, request): Handles GET requests and renders the add_group.html template.
+        - post(self, request): Handles POST requests and processes the group data.
+    """
     def get(self, request):
         form = GroupForm(user=request.user)
         return render(request, 'add_group.html', {'form': form})
 
     def post(self, request):
-        form = GroupForm(request.POST, user=request.user)
-        if form.is_valid():
-            form.save()
-            # group = form.save()
-            return redirect('base')
-        else:
-            return HttpResponse("error")
+        try:
+            form = GroupForm(request.POST, user=request.user)
+            if form.is_valid():
+                form.save()
+                return redirect('base')
+        except Exception as e:
+            return HttpResponse(f"An error occurred: {e}. Please try again.")
+        return HttpResponse("An error occurred. Please try again.")
 
 
 class EditGroupView(View):
+    """
+    View for editing existing groups.
+
+    Methods:
+        - get(self, request, group_id): Handles GET requests and renders the edit_group.html template.
+        - post(self, request, group_id): Handles POST requests and updates the group data.
+    """
     def get(self, request, group_id):
         group = Group.objects.get(pk=group_id)
         form = GroupForm(instance=group, user=request.user)
         return render(request, 'edit_group.html', {'form': form})
 
     def post(self, request, group_id):
-        group = Group.objects.get(pk=group_id)
-        form = GroupForm(request.POST, instance=group, user=request.user)
-        if form.is_valid():
-            form.save()
-            return redirect('base')
-        else:
-            return HttpResponse("error")
+        try:
+            group = Group.objects.get(pk=group_id)
+            form = GroupForm(request.POST, instance=group, user=request.user)
+            if form.is_valid():
+                form.save()
+                return redirect('base')
+        except Exception as e:
+            return HttpResponse(f"An error occurred: {e}. Please try again.")
+        return HttpResponse("An error occurred. Please try again.")
 
 
 class DeleteGroupView(View):
+    """
+    View for deleting existing groups.
+
+    Methods:
+        - get(self, request, group_id): Handles GET requests and renders the group_delete.html template.
+        - post(self, request, group_id): Handles POST requests and deletes the group.
+    """
     def get(self, request, group_id):
         group = get_object_or_404(Group, pk=group_id)
         return render(request, 'group_delete.html', {'group': group})
 
     def post(self, request, group_id):
-        group = get_object_or_404(Group, pk=group_id)
-        group.delete()
-        return redirect('base')
+        try:
+            group = get_object_or_404(Group, pk=group_id)
+            group.delete()
+            return redirect('base')
+        except Exception as e:
+            return HttpResponse(f"An error occurred: {e}. Please try again.")
 
 
 ### PLAYER SECTION ###
 
 
 class AddPlayerView(View):
+    """
+    View for adding new players.
+
+    Methods:
+        - get(self, request): Handles GET requests and renders the add_player.html template.
+        - post(self, request): Handles POST requests and processes the player data.
+    """
     def get(self, request):
         form = ParticipantForm(user=request.user)
         return render(request, 'add_player.html', {'form': form})
 
     def post(self, request):
-        form = ParticipantForm(request.POST, user=request.user)
-        if form.is_valid():
-            form.save()
-            return redirect('base')
-        else:
-            return HttpResponse("error")
+        try:
+            form = ParticipantForm(request.POST, user=request.user)
+            if form.is_valid():
+                form.save()
+                return redirect('base')
+        except Exception as e:
+            return HttpResponse(f"An error occurred: {e}. Please try again.")
+        return HttpResponse("An error occurred. Please try again.")
 
 
 class EditPlayerView(View):
+    """
+    View for editing existing players.
+
+    Methods:
+        - get(self, request, player_id): Handles GET requests and renders the edit_player.html template.
+        - post(self, request, player_id): Handles POST requests and updates the player data.
+    """
     def get(self, request, player_id):
         player = Participant.objects.get(pk=player_id)
         form = ParticipantForm(instance=player, user=request.user)
         return render(request, 'edit_player.html', {'form': form})
 
     def post(self, request, player_id):
-        player = Participant.objects.get(pk=player_id)
-        form = ParticipantForm(request.POST, instance=player, user=request.user)
-        if form.is_valid():
-            form.save()
-            return redirect('base')
-        else:
-            return HttpResponse("error")
+        try:
+            player = Participant.objects.get(pk=player_id)
+            form = ParticipantForm(request.POST, instance=player, user=request.user)
+            if form.is_valid():
+                form.save()
+                return redirect('base')
+        except Exception as e:
+            return HttpResponse(f"An error occurred: {e}. Please try again.")
+        return HttpResponse("An error occurred. Please try again.")
 
 
 class DeletePlayerView(View):
+    """
+    View for deleting existing players.
+
+    Methods:
+        - get(self, request, player_id): Handles GET requests and renders the player_delete.html template.
+        - post(self, request, player_id): Handles POST requests and deletes the player.
+    """
     def get(self, request, player_id):
         player = get_object_or_404(Participant, pk=player_id)
         return render(request, 'player_delete.html', {'player': player})
 
     def post(self, request, player_id):
-        player = get_object_or_404(Participant, pk=player_id)
-        player.delete()
-        return redirect('base')
+        try:
+            player = get_object_or_404(Participant, pk=player_id)
+            player.delete()
+            return redirect('base')
+        except Exception as e:
+            return HttpResponse(f"An error occurred: {e}. Please try again.")
 
 
 ### MAIN GAME SECTION ###
 
 
 class GameView(View):
+    """
+    View for creating and sending gift pairs.
+
+    Methods:
+        - get(self, request): Handles GET requests and renders the game.html template with a form.
+        - post(self, request): Handles POST requests, creates gift pairs, and sends emails.
+    """
     def get(self, request):
         form = GameForm(user=request.user)
         return render(request, 'game.html', {'form': form})
@@ -384,13 +465,18 @@ class GameView(View):
                 recipient_list = [giver.email]
                 send_mail(subject, message, email_from, recipient_list)
 
-            return redirect('gift-pairs', group_id=group.id)
-            #return render(request, 'game.html', {'form': form, 'date': date})
+            return HttpResponse('success') # create summary view?
         else:
-            return HttpResponse("error")
+            return HttpResponse("An error occured. Please try again")
 
 
 class MyGiftPairsView(View):
+    """
+    View for displaying gift pairs for logged user.
+
+    Methods:
+        - get(self, request): Handles GET requests and renders the my_gift_pairs.html template.
+    """
     def get(self, request):
         today = date.today()
         user_email = request.user.email
@@ -408,6 +494,13 @@ class MyGiftPairsView(View):
 
 
 class LookupView(View):
+    """
+    View for looking up gift pairs for given email.
+
+    Methods:
+        - get(self, request): Handles GET requests and renders the lookup.html template.
+        - post(self, request): Handles POST requests and processes the email data.
+    """
     def get(self, requst):
         form = EmailLookupForm()
         return render(requst, 'lookup.html', {'form': form})
@@ -422,7 +515,6 @@ class LookupView(View):
             except participant.DoesNotExist:
                 gift_pairs = []
 
-            # return render(request, 'my_gift_pairs.html', {'gift_pairs': gift_pairs})
             return render(request, 'lookup_result.html', {'gift_pairs': gift_pairs})
 
         return render(request, 'lookup.html', {'form': form})
@@ -432,13 +524,13 @@ class LookupView(View):
 ########### TO DO ############
 
 # MUST DO:
+# description on pages with info what to do
 # event names apprear more than once
 # tests
-# validaton
-# documentation
 # create special gmail account !! cant find the name but it is easy btw
 # python anywhere BUT POSTGRES IS NOT AVALIABLE IN FREE OPTION?? -> FIND ANOTHER SOLUTION
 # desgin + description CLEAN UP + btns on pages
+# some succes / error templates would be nice
 
 
 # MUST BUT NOT FIRST PRIO:
@@ -453,52 +545,3 @@ class LookupView(View):
 # reset password
 # is model group even necessery? i can add more data fields to game form - but it is not very important
 # what about people who want to check their games, but it was quick game and it is not saved in db? maybe model for quick game in db will solve it
-
-
-
-# views that are no longer needed
-
-"""class GiftPairs(View): # hopefully will not be needed
-    def get(self, request, group_id):
-        group = get_object_or_404(Group, pk=group_id)
-        gift_pairs = GiftPair.objects.filter(group=group)
-        return render(request, 'gift_pairs.html', {'gift_pairs': gift_pairs})
-
-
-class BaseView(View): # this view is just temporary - will be deleted later
-    def get(self, request):
-        user = request.user
-        return render(request, "base.html", {'user': user}) # base meaning logged user view - main view for logged user!
-
-this view is probably not needed at this stage
-
-
-class CustomPasswrordResetView(View):
-    form_class = CustomPasswordResetForm
-    template_name = 'reset_password.html'
-    success_url = 'login'
-
-    def get(self, request):
-        form = self.form_class()
-        return render(request, self.template_name, {'form': form})
-
-    def post(self, request):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            form.save(request=request)
-            return redirect(self.success_url)
-        else:
-            return HttpResponse("error")
-    different approach - not working    
-    def post(self, request):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            email = form.cleaned_data['email']
-            subject = 'Reset Password'
-            message = 'Please click the link below to reset your password:\n'
-            reset_url = f'http://example.com/reset-password/confirm/{email}/'
-            message += reset_url
-            email_from = settings.EMAIL_HOST_USER
-            recipient_list = [email]
-            send_mail(subject, message, email_from, recipient_list)
-            return redirect(self.success_url)"""

@@ -59,7 +59,7 @@ urlpatterns = [
     path('delete-account/<int:pk>/', views.DeleteAccountView.as_view(), name='delete_account'),
     path('my-gift-pairs/', MyGiftPairsView.as_view(), name='my-gift-pairs'),
     path('email-lookup/', LookupView.as_view(), name='email-lookup'),
-    #path('gift-pairs/<int:group_id>/', GiftPairs.as_view(), name='gift-pairs'),
+    # path('gift-pairs/<int:group_id>/', GiftPairs.as_view(), name='gift-pairs'),
     # path('reset-password/', CustomPasswrordResetView.as_view(), name='reset-pswrd'),
     # path('reset-password/confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
 ]

@@ -143,14 +143,13 @@ class GameForm(forms.Form):
     """
     Form created for creating new shuffle.
     """
-    def __init__(self, user, *args, **kwargs):
-        """
-        Function that allows loggd user to choose 
-        only from events and groups created by them.
-        """
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)  # Pobieramy 'user' z kwargs i usuwamy go, aby nie przekazać do super()
         super(GameForm, self).__init__(*args, **kwargs)
-        self.fields['event'].queryset = Event.objects.filter(organizer=user)
-        self.fields['group'].queryset = Group.objects.filter(creator=user)
+
+        if user:
+            self.fields['event'].queryset = Event.objects.filter(organizer=user)
+            self.fields['group'].queryset = Group.objects.filter(creator=user)
 
     event = forms.ModelChoiceField(queryset=Event.objects.none())
     group = forms.ModelChoiceField(queryset=Group.objects.none())

@@ -152,7 +152,7 @@ class DeleteAccountView(SuccessMessageMixin, DeleteView):
 
 def register(request):
     """
-    Method for registering new users.
+    Function for registering new users.
     """
     if request.method == 'POST':
         form = RegisterForm(request.POST)
@@ -464,9 +464,23 @@ class GameView(View):
                 recipient_list = [giver.email]
                 send_mail(subject, message, email_from, recipient_list)
 
-            return HttpResponse('success') # create summary view?
+            return HttpResponse('success')
+            # return redirect('gift-pairs', group_id=group.id)
         else:
             return HttpResponse("An error occured. Please try again")
+
+
+class GiftPairs(View):
+    """
+    View for displaying gift pairs for given event.
+
+    Methods:
+        - get(self, request, event_id): Handles GET requests and renders the gift_pairs.html template.
+    """
+    def get(self, request, group_id):
+        group = get_object_or_404(Group, pk=group_id)
+        gift_pairs = GiftPair.objects.filter(group=group)
+        return render(request, 'gift_pairs.html', {'gift_pairs': gift_pairs})
 
 
 class MyGiftPairsView(View):
@@ -523,13 +537,14 @@ class LookupView(View):
 ########### TO DO ############
 
 # MUST DO:
+# tests!!!
 # description on pages with info what to do
 # event names apprear more than once
-# tests
 # create special gmail account !! cant find the name but it is easy btw
 # python anywhere BUT POSTGRES IS NOT AVALIABLE IN FREE OPTION?? -> FIND ANOTHER SOLUTION
 # desgin + description CLEAN UP + btns on pages
 # some succes / error templates would be nice
+# gift pairs view must be deleted - better to create succes view that can be used more than once with main page btn
 
 
 # MUST BUT NOT FIRST PRIO:

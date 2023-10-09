@@ -455,7 +455,6 @@ class GameView(View):
                 gift_pair.save()
 
                 # sending emails logic
-
                 subject = 'Secret Santa'
                 message = f'Hi {giver.name},\n\nYou are {receiver.name}\'s Secret Santa!'
                 message += f'\n\nThe maximum price for gifts is {max_price} {currency}.'

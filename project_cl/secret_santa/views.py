@@ -19,10 +19,12 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
 
+### MAIN VIEW AND ITS' OPTIONS SECTION ###
+
+
 class MainView(View):
     """
     First view after entering the website.
-
     """
     def get(self, request):
         return render(request, 'index.html')
@@ -376,16 +378,16 @@ class LookupView(View):
 # tests
 # validaton
 # documentation
-# delet Gift model and migrate
+# create special gmail account !! cant find the name but it is easy btw
+# python anywhere BUT POSTGRES IS NOT AVALIABLE IN FREE OPTION?? -> FIND ANOTHER SOLUTION
+# desgin + description CLEAN UP + btns on pages
 
 
 # MUST BUT NOT FIRST PRIO:
-# create special gmail account
-# python anywhere
 # menu on logged user (part of design)
 # ability to load cvs
-# desgin + description CLEAN UP + btns on pages
 # custom messages
+# PSWRD reset 
 
 
 # NOT NECESSERY:

@@ -3,20 +3,26 @@ from django.contrib.auth.models import User
 
 
 class Event(models.Model):
+    """
+    Model created for events.
+    """
     name = models.CharField(max_length=64)
     description = models.TextField()
-    organizer = models.ForeignKey(User, on_delete=models.CASCADE) # one:many relationship
+    organizer = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
 
 
 class Participant(models.Model):
+    """
+    Model created for players that can be then assigned to a group.
+    """
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
     email = models.EmailField()
-    wishlist = models.TextField(blank=True, null=True) # optional
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, default=None) # one:many relationship
+    wishlist = models.TextField(blank=True, null=True)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
 
     @property
     def name(self):
@@ -26,13 +32,10 @@ class Participant(models.Model):
         return self.name
 
 
-# class Gift(models.Model): # WILL BE DELETED LATER PROPABLY?
-#     name = models.CharField(max_length=64)
-#     receiver = models.ForeignKey(Participant, on_delete=models.CASCADE)
-#     event = models.ForeignKey(Event, on_delete=models.CASCADE)
-
-
 class Group(models.Model):
+    """
+    Model created for groups of players that can be used in a shuffle.
+    """
 
     CURRENCY_CHOICES = [
         ('USD', 'U.S. dollar (USD)'),
@@ -77,8 +80,8 @@ class Group(models.Model):
     ]
 
     name = models.CharField(max_length=64)
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, default=1) # one:many relationship
-    participants = models.ManyToManyField(Participant) # many:many relationship
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    participants = models.ManyToManyField(Participant)
     price_limit = models.DecimalField(max_digits=6, decimal_places=2)
     currency = models.CharField(
         max_length=3,
@@ -91,8 +94,11 @@ class Group(models.Model):
 
 
 class GiftPair(models.Model):
-    giver = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='gifts_given') # many:many relationship
-    receiver = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='gifts_received') # many:many relationship
+    """
+    Model containing shuffles results.
+    """
+    giver = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='gifts_given')
+    receiver = models.ForeignKey(Participant, on_delete=models.CASCADE, related_name='gifts_received')
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     date = models.DateField()

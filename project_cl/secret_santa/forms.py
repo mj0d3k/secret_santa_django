@@ -50,12 +50,20 @@ CURRENCY_CHOICES = [
 
 
 class QucikGameForm(forms.Form):
+    """
+    Form created for quick game option.
+    Allows to create shuffle when you are in a hurry.
+    Results are not being saved in database.
+    """
     max_price = forms.DecimalField(label='Max price', decimal_places=2, min_value=0.01)
     currency = forms.ChoiceField(label='Currency', choices=CURRENCY_CHOICES, widget=forms.Select)
     date = forms.DateField(label='Date', widget=forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'}))
 
 
 class EventForm(forms.ModelForm):
+    """"
+    Form created for adding new events.
+    """
     class Meta:
         model = Event
         fields = '__all__'
@@ -65,6 +73,10 @@ class EventForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        """
+        Method that allows to pass user as an argument.
+        Organizer is now being automaticly added to the form (logged user).
+        """
         user = kwargs.pop('user', None)
         super(EventForm, self).__init__(*args, **kwargs)
         if user:
@@ -72,6 +84,9 @@ class EventForm(forms.ModelForm):
 
 
 class GroupForm(forms.ModelForm):
+    """
+    Form created for adding new groups.
+    """
     class Meta:
         model = Group
         fields = '__all__'
@@ -81,22 +96,31 @@ class GroupForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        """
+        Method that allows to pass user as an argument.
+        Creator is now being automaticly added to the form (logged user).
+        User can only choose players from the list of their participants.
+        """
         user = kwargs.pop('user', None)
         super(GroupForm, self).__init__(*args, **kwargs)
         if user:
             self.initial['creator'] = user
             self.fields['participants'].queryset = Participant.objects.filter(creator=user)
 
-    # checking if group contains at least 3 participants
-
     def clean(self):
+        """
+        Method checking if created group contains at least 3 participants.
+        """
         cleaned_data = super().clean()
         participants = cleaned_data.get('participants')
         if participants and len(participants) < 3:
-            raise ValidationError('Every group must contain at least 3 players.')
+            raise ValidationError('Group must contain at least 3 players.')
 
 
 class ParticipantForm(forms.ModelForm):
+    """
+    Form created for adding new participants.
+    """
     class Meta:
         model = Participant
         fields = '__all__'
@@ -105,6 +129,10 @@ class ParticipantForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        """
+        Method that allows to pass user as an argument.
+        Creator is now being automaticly added to the form (logged user).
+        """
         user = kwargs.pop('user', None)
         super(ParticipantForm, self).__init__(*args, **kwargs)
         if user:
@@ -112,7 +140,14 @@ class ParticipantForm(forms.ModelForm):
 
 
 class GameForm(forms.Form):
+    """
+    Form created for creating new shuffle.
+    """
     def __init__(self, user, *args, **kwargs):
+        """
+        Method that allows loggd user to choose 
+        only from events and groups created by them.
+        """
         super(GameForm, self).__init__(*args, **kwargs)
         self.fields['event'].queryset = Event.objects.filter(organizer=user)
         self.fields['group'].queryset = Group.objects.filter(creator=user)
@@ -123,6 +158,9 @@ class GameForm(forms.Form):
 
 
 class RegisterForm(UserCreationForm):
+    """
+    Form created for registering new users.
+    """
     email = forms.EmailField(label='Email', required=True)
     first_name = forms.CharField(label='First name', required=True)
     last_name = forms.CharField(label='Last name', required=True)
@@ -133,10 +171,17 @@ class RegisterForm(UserCreationForm):
 
 
 class EmailLookupForm(forms.Form):
+    """
+    Form created for looking up shuffles results
+    for a special email address.
+    """
     email = forms.EmailField(label='Enter your email', required=True)
 
 
-class CustomPasswordResetForm(PasswordResetForm):
+class CustomPasswordResetForm(PasswordResetForm): # not sure if I will include this view
+    """
+    Form created for resetting password.
+    """
     email = forms.EmailField(
         label="Your Email",
         max_length=254,

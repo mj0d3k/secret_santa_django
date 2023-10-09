@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from secret_santa import views
-from django.contrib.auth import views as auth_views
+#from django.contrib.auth import views as auth_views
 from secret_santa.views import (MainView,
                                 QuickGameView,
                                 LoginView,
@@ -33,7 +33,6 @@ from secret_santa.views import (MainView,
                                 DeleteGroupView,
                                 DeletePlayerView,
                                 GameView,
-                                GiftPairs,
                                 ChangePassword,
                                 MyGiftPairsView,
                                 LookupView,)
@@ -55,12 +54,12 @@ urlpatterns = [
     path('edit-player/<int:player_id>/', EditPlayerView.as_view(), name='edit-player'),
     path('delete-player/<int:player_id>/', DeletePlayerView.as_view(), name='delete-player'),
     path('new-game/', GameView.as_view(), name='new-game'),
-    path('gift-pairs/<int:group_id>/', GiftPairs.as_view(), name='gift-pairs'),
     path('register/', views.register, name='register'),
     path('change-password/', ChangePassword.as_view(), name='change-password'),
     path('delete-account/<int:pk>/', views.DeleteAccountView.as_view(), name='delete_account'),
     path('my-gift-pairs/', MyGiftPairsView.as_view(), name='my-gift-pairs'),
     path('email-lookup/', LookupView.as_view(), name='email-lookup'),
+    #path('gift-pairs/<int:group_id>/', GiftPairs.as_view(), name='gift-pairs'),
     # path('reset-password/', CustomPasswrordResetView.as_view(), name='reset-pswrd'),
     # path('reset-password/confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
 ]

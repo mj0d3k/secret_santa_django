@@ -74,7 +74,7 @@ class EventForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         """
-        Method that allows to pass user as an argument.
+        Function that allows to pass user as an argument.
         Organizer is now being automaticly added to the form (logged user).
         """
         user = kwargs.pop('user', None)
@@ -97,7 +97,7 @@ class GroupForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         """
-        Method that allows to pass user as an argument.
+        Function that allows to pass user as an argument.
         Creator is now being automaticly added to the form (logged user).
         User can only choose players from the list of their participants.
         """
@@ -109,7 +109,7 @@ class GroupForm(forms.ModelForm):
 
     def clean(self):
         """
-        Method checking if created group contains at least 3 participants.
+        Function checking if created group contains at least 3 participants.
         """
         cleaned_data = super().clean()
         participants = cleaned_data.get('participants')
@@ -130,7 +130,7 @@ class ParticipantForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         """
-        Method that allows to pass user as an argument.
+        Function that allows to pass user as an argument.
         Creator is now being automaticly added to the form (logged user).
         """
         user = kwargs.pop('user', None)
@@ -145,7 +145,7 @@ class GameForm(forms.Form):
     """
     def __init__(self, user, *args, **kwargs):
         """
-        Method that allows loggd user to choose 
+        Function that allows loggd user to choose 
         only from events and groups created by them.
         """
         super(GameForm, self).__init__(*args, **kwargs)

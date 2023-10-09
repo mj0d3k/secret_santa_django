@@ -25,12 +25,23 @@ from django.utils.decorators import method_decorator
 class MainView(View):
     """
     First view after entering the website.
+
+    Methods:
+        - get(self, request): Handles GET requests and renders the index.html template.
     """
     def get(self, request):
         return render(request, 'index.html')
 
 
 class QuickGameView(View):
+    """
+    View implementing quick game option.
+
+    Methods:
+        - get(self, request): Handles GET requests and renders the quick game form.
+        - post(self, request): Handles POST requests and processes the quick game data,
+                              including validation and Secret Santa assignment.
+    """
     def get(self, request):
         form = QucikGameForm()
         return render(request, 'quick_game.html', {'form': form})
@@ -45,20 +56,30 @@ class QuickGameView(View):
 
             participants = []
             for i in range(1, num_players + 1):
-                players_name = request.POST.get(f'player_name_{i}')
-                players_email = request.POST.get(f'player_email_{i}')
-                participants.append((players_name, players_email))
+                player_name = request.POST.get(f'player_name_{i}')
+                player_email = request.POST.get(f'player_email_{i}')
+                if not player_name or not player_email or '@' not in player_email:
+                    return HttpResponse("error: Invalid player data")
+
+                participants.append((player_name, player_email))
 
             secret_santa(participants, max_price, currency, date)
 
-            return HttpResponse("success")
+            return HttpResponse("All emails have been successfully sent! Enjoy your `Secret Santa` game!")
         else:
-            return HttpResponse("error")
-
-        # valitation error - need to add it to forms.py
+            return HttpResponse("error: Invalid form data")
 
 
 def secret_santa(participants, max_price, currency, date):
+    """
+    Function created for running secret santa function.
+    Shuffles results are not saved into database.
+
+    :param participants: list of tuples (name, email)
+    :param max_price: maximum price for gifts
+    :param currency: currency of max_price
+    :param date: date of gift exchange
+    """
     random.shuffle(participants)
     for i in range(len(participants)):
         giver_name, giver_email = participants[i]
@@ -73,12 +94,16 @@ def secret_santa(participants, max_price, currency, date):
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [giver_email]
         send_mail(subject, message, email_from, recipient_list)
-        print(f'Successfully sent email to {giver_email}')
-
-        # many mails sending is time consuming - work on this later
 
 
 class LoginView(View):
+    """
+    View for user login.
+
+    Methods:
+        - get(self, request): Handles GET requests for the login page.
+        - post(self, request): Handles POST requests for user login.
+    """
     def get(self, request):
         if request.user.is_authenticated:
             return redirect('base')
@@ -92,21 +117,33 @@ class LoginView(View):
             login(request, user)
             return redirect('base')
         else:
-            return HttpResponse("error")
+            return HttpResponse("Your login data was invalid. Please try again.")
 
 
 class LogoutView(View):
+    """
+    View for user logout.
+
+    Methods:
+        - get(self, request): Handles GET requests for user logout.
+    """
     def get(self, request):
         logout(request)
         return render(request, "index.html")
 
 
 class ChangePassword(PasswordChangeView):
+    """
+    View for changing user password.
+    """
     template_name = 'change_password.html'
     success_url = '/login/'
 
 
 class DeleteAccountView(SuccessMessageMixin, DeleteView):
+    """
+    View for deleting user account.
+    """
     model = User
     template_name = 'user_delete_confirm.html'
     success_message = 'Your account has been deleted.'
@@ -114,6 +151,9 @@ class DeleteAccountView(SuccessMessageMixin, DeleteView):
 
 
 def register(request):
+    """
+    Method for registering new users.
+    """
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -125,6 +165,14 @@ def register(request):
 
 
 class LoggedUserView(View):
+    """
+    View for logged user.
+    Allows user to mange their events, groups, players and gift pairs.
+    Provides links to other views and option for new draws.
+
+    Methods:
+        - get(self, request): Handles GET requests and renders the logged_user.html template.
+    """
     def get(self, request):
         user = request.user
         events = Event.objects.filter(organizer=user)
@@ -147,17 +195,27 @@ class LoggedUserView(View):
 
 @method_decorator(login_required, name='dispatch')
 class AddEventView(View):
+    """
+    View for adding new events.
+
+    Methods:
+        - get(self, request): Handles GET requests and renders the add_event.html template.
+        - post(self, request): Handles POST requests and processes the event data,
+    """
     def get(self, request):
         form = EventForm(user=request.user)
         return render(request, 'add_event.html', {'form': form})
 
     def post(self, request):
         form = EventForm(request.POST, user=request.user)
-        if form.is_valid():
-            form.save()
-            return redirect('base')
-        else:
-            return HttpResponse("error")
+        try:
+            if form.is_valid():
+                form.save()
+                return redirect('base')
+        except Exception as e:
+            return HttpResponse(f"Erorr occured: {e}. Please try again.")
+
+        return HttpResponse(f"Erorr occured: {e}. Please try again.")
 
 
 class EditEventView(View):

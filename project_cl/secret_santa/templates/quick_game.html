@@ -1,7 +1,82 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
+
+{% block content %}
 <head>
     <title>Quick game</title>
+    <style>
+        body {
+            background-color: #EBD8B2;
+            font-family: 'Helvetica', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: #654E92;
+            font-family: 'Helvetica', sans-serif;
+            font-size: 40px;
+        }
+
+        form {
+            background-color: #A5C0DD;
+            color: #654E92;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            font-size: 15px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #654E92;
+        }
+
+        input[type="text"],
+        input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            margin-top: 5px;
+        }
+
+        #players-fields {
+            display: flex;
+            flex-wrap: wrap;
+            font-weight: bold;
+        }
+
+        button[type="button"] {
+            background-color: #A5C0DD;
+            color: #654E92;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 20px;
+        }
+
+        button[type="submit"] {
+            background-color: #A5C0DD;
+            color: #654E92;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 20px;
+        }
+
+        button[type="button"]:hover,
+        button[type="submit"]:hover {
+            background-color: #654E92;
+            color: #EBD8B2;
+        }
+    </style>
 </head>
 <body>
     <h1>Quick secret santa</h1>
@@ -10,7 +85,6 @@
         {{ form.as_p }}
 
         <div id="players-fields">
-            <h3>Players</h3>
             <label for="id_player_name_1">Player 1 Name:</label>
             <input type="text" name="player_name_1" id="id_player_name_1">
             <label for="id_player_email_1">Player 1 Email:</label>
@@ -76,4 +150,4 @@
         });
     </script>
 </body>
-</html>
+{% endblock %}

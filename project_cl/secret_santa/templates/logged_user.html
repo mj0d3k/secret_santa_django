@@ -1,9 +1,131 @@
 {% extends "base.html" %}
 
 {% block content %}
+</head>
+<body>
+
+    <style>
+        body {
+            background-color: #EBD8B2;
+            font-family: 'Helvetica', sans-serif;
+            text-align: left;
+            margin: 0;
+            padding: 0;
+        }
+
+        .info-bar {
+            background-color: #654E92;
+            color: #A5C0DD;
+            padding: 10px 0;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1;
+        }
+
+        .menu-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .menu-link {
+            color: #EBD8B2;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 0 20px;
+        }
+
+        .menu-link:hover {
+            text-decoration: underline;
+        }
+
+        .user-info {
+            color: #A5C0DD;
+            font-weight: bold;
+        }
+
+        .main.content {
+            margin-top: 60px;
+        }
+
+        a.author-link {
+            color: #EBD8B2;
+            font-weight: bold;
+        }
+
+        .mail-help {
+            font-weight: normal;
+        }
+
+        .blank-el-for-footer {
+            margin-bottom: 100px;
+        }
+
+        a button {
+            background-color:#A5C0DD;
+            color: #654E92;
+            cursor: pointer;
+            font-size: 15px;
+            text-decoration: none;
+            margin: 0 10px;
+            padding: 10px 10px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Helvetica', sans-serif;
+            font-weight: normal;
+        }
+
+        a button:hover {
+            background-color: #654E92;
+            color: #EBD8B2;
+        }
+
+        .reveal-button {
+            background-color:#A5C0DD;
+            color: #654E92;
+            cursor: pointer;
+            font-size: 15px;
+            text-decoration: none;
+            margin: 0 10px;
+            padding: 10px 10px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Helvetica', sans-serif;
+            font-weight: normal;
+        }
+
+        .reveal-button:hover {
+            background-color: #654E92;
+            color: #EBD8B2;
+        }
+
+        footer {
+            background-color: #654E92;
+            color: #A5C0DD;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 10;
+            width: 100%;
+            font-weight: bold;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+    </style>
     <div class="info-bar">
         <div class="menu-container">
-            <a class="menu-link" href="/quick-game/">Quick game</a>
             <span class="user-info">User logged: {{ user.username }}</span>
             {% if user.is_authenticated %}
             <a class="menu-link" href="/logout/">Logout</a>
@@ -12,18 +134,15 @@
             <a class="menu-link" href="/login/">Login</a>
             {% endif %}
             <a class="menu-link" href="{% url 'delete_account' user.id %}">Delete account</a>
+            <a class="menu-link" href="/quick-game/">Quick game</a>
+            <a class="menu-link" href="/my-gift-pairs/">My games</a>
         </div>
     </div>
 
-<div class="main content">
+    <div class="main content">
 
-    <!-- <style>
-        .hidden {
-            display: none;
-        }
-    </style> -->
-
-    <h1>Gift Pair List</h1>
+        <h1>Games created by me</h1>
+        <a href="/new-game/"><button>New game</button></a>
 
         {% regroup gift_pairs by event as event_list %}
 
@@ -44,8 +163,6 @@
         {% endfor %}
 
 
-    <a href="/new-game/">Create new game</a>
-
     <h1>Your created events:</h1>
     <ul>
         {% for event in events %}
@@ -54,7 +171,9 @@
             <a href="/delete-event/{{ event.id }}/">Delete</a>
         {% endfor %}
     </ul>
-    <a href = "/add-event/">Add event</a>
+
+    <a href="/add-event/"><button>Add event</button></a>
+
 
     <h1>Your created groups:</h1>
     <ul>
@@ -69,7 +188,7 @@
             </ul>
         {% endfor %}
     </ul>
-    <a href = "/add-group/">Add group</a>
+    <a href="/add-group/"><button>Add group</button></a>
 
     <h1>Your created players:</h1>
     <ul>
@@ -79,10 +198,8 @@
             <a href="/delete-player/{{ person.id }}/">Delete</a>
         {% endfor %}
     </ul>
-    <a href = "/add-player/">Add player</a>
+    <a href="/add-player/"><button>Add player</button></a>
 
-    <h1>Shuffles I participate in:</h1>
-    <a href="/my-gift-pairs/">shuffles I participate in</a>
 
 </div>
 
@@ -107,7 +224,12 @@
 
 {% endblock %}
 
-
 {% block footer %}
- <p>Secret Santa by me</p>
+<div class="blank-el-for-footer"></div>
+<footer>
+    <div class="footer-container">
+    <p>Created by - <a class="author-link" href="https://github.com/mj0d3k?tab=repositories">mj0d3k</a></p>
+    <p class="mail-help">Get help: mail@soon</p>
+    </div>
+</footer>
 {% endblock %}

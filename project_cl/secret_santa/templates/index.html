@@ -3,17 +3,74 @@
 {% block content %}
 <head>
     <title>Secret Santa</title>
+    <style>
+        body {
+            background-color: #EBD8B2;
+            font-family: 'Helvetica', sans-serif;
+        }
+
+        h1 {
+            color: #654E92;
+            font-family: 'Pixelify Sans', sans-serif;
+        }
+
+        a button {
+            background-color:#A5C0DD;
+            color: #654E92;
+            cursor: pointer;
+            font-size: 20px;
+            text-decoration: none;
+            margin: 0 10px;
+            padding: 15px 15px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Helvetica', sans-serif;
+            font-weight: normal;
+        }
+
+        a button:hover {
+            background-color: #654E92;
+            color: #EBD8B2;
+        }
+
+        .fancy-text {
+            font-family: 'Helvetica', sans-serif;
+            font-size: 40px;
+            color: #654E92;
+            padding: 20px;
+        }
+
+        .info-paragraph {
+            background-color: #654E92;
+            color: #EBD8B2;
+            border-radius: 10px;
+            padding: 10px;
+            margin: 10px;
+            width: 50%; 
+            font-family: 'Helvetica', sans-serif;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;   
+        }
+    </style>
+</head>
 </head>
 <body>
-    <h1>Ho, ho, ho!</h1>
+    <h1 class="fancy-text">Ho, ho, ho!</h1>
+    <p>Are you familiar with the Secret Santa term?</p>
     {% if user.is_authenticated %}
-        <a href="/logged/"> <button>My Profile</button></a>
-        <a href="/quick-game/"> <button>Quick Game</button></a>
+        <a href="/logged/"><button>My Profile</button></a>
+        <a href="/quick-game/"><button>Quick Game</button></a>
+        <p class="info-paragraph">What I can find on profile</p>
     {% else %}
-        <a href="/quick-game/"> <button>Quick Game</button></a>
-        <a href="/login/"> <button>Login</button></a>
-        <a href="/register/"> <button>Register</button></a>
-        <a href="/email-lookup/"> <button>Check My Events</button></a>
+        <a href="/quick-game/"><button>Quick Game</button></a>
+        <a href="/login/"><button>Login</button></a>
+        <a href="/register/"><button>Register</button></a>
+        <a href="/email-lookup/"><button>Check My Events</button></a>
+        <p class="info-paragraph">Info about check my events</p>
+        <p class="info-paragraph">Login Register 0 benefits</p>
     {% endif %}
+    <p class="info-paragraph">This is info about quick game</p>
 </body>
 {% endblock %}

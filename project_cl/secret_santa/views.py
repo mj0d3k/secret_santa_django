@@ -65,7 +65,7 @@ class QuickGameView(View):
 
             secret_santa(participants, max_price, currency, date)
 
-            return HttpResponse("All emails have been successfully sent! Enjoy your `Secret Santa` game!")
+            return HttpResponse("All emails have been successfully sent! Enjoy your `Secret Santa` game!") # succes page with back btn
         else:
             return HttpResponse("error: Invalid form data")
 
@@ -464,13 +464,14 @@ class GameView(View):
                 recipient_list = [giver.email]
                 send_mail(subject, message, email_from, recipient_list)
 
-            return HttpResponse('success')
+            return redirect('base')
+            # return HttpResponse('success')
             # return redirect('gift-pairs', group_id=group.id)
         else:
             return HttpResponse("An error occured. Please try again")
 
 
-class GiftPairs(View):
+class GiftPairs(View): # this view is not necessary
     """
     View for displaying gift pairs for given event.
 
@@ -519,6 +520,7 @@ class LookupView(View):
         return render(requst, 'lookup.html', {'form': form})
 
     def post(self, request):
+        today = date.today()
         form = EmailLookupForm(request.POST)
         if form.is_valid():
             user_email = form.cleaned_data['email']
@@ -528,7 +530,7 @@ class LookupView(View):
             except participant.DoesNotExist:
                 gift_pairs = []
 
-            return render(request, 'lookup_result.html', {'gift_pairs': gift_pairs})
+            return render(request, 'lookup_result.html', {'gift_pairs': gift_pairs, 'participant': participant, 'today': today})
 
         return render(request, 'lookup.html', {'form': form})
 
@@ -538,7 +540,6 @@ class LookupView(View):
 
 # MUST DO:
 # tests!!!
-# description on pages with info what to do
 # event names apprear more than once
 # create special gmail account !! cant find the name but it is easy btw
 # python anywhere BUT POSTGRES IS NOT AVALIABLE IN FREE OPTION?? -> FIND ANOTHER SOLUTION

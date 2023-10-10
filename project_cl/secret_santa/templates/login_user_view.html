@@ -1,7 +1,81 @@
 {% extends "base.html" %}
 
 {% block content %}
+<head>
+    <style>
+        body {
+            background-color: #EBD8B2;
+            font-family: 'Helvetica', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
 
+
+        form {
+            background-color: #A5C0DD;
+            color: #654E92;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            font-size: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #654E92;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            margin-top: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #654E92;
+            color: #EBD8B2;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 20px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #654E92;
+            color: #EBD8B2;
+        }
+
+        .register-info {
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: normal;
+        }
+
+        .registration-link {
+            color: #654E92;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .registration-link:hover {
+            text-decoration: underline;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
     <form method="post">
         {% csrf_token %}
         <label for="username">Username:</label>
@@ -10,13 +84,8 @@
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required>
         <br>
-        <input type="submit" value="Zaloguj">
-        <!-- <p> Forgot your password? </p> <a href="/reset-password/">Reset password</a> -->
-        <p> You don't have an account yet?</p> <a href="/register/">Register</a>
+        <input type="submit" value="Log in">
+        <p class="register-info">Don't have an account yet? <a class="registration-link" href="/register/">Register</a></p>
     </form>
-    
-
-
-{% endblock %}
-{% block footer %}
+</body>
 {% endblock %}

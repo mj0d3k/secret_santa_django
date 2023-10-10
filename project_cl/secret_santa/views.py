@@ -549,7 +549,6 @@ class LookupView(View):
 
 
 # MUST BUT NOT FIRST PRIO:
-# menu on logged user (part of design)
 # ability to load cvs
 # custom messages
 # PSWRD reset 

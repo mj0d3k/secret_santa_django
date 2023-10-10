@@ -26,6 +26,7 @@
             border-radius: 10px;
             font-family: 'Helvetica', sans-serif;
             font-weight: normal;
+            display: inline-block; 
         }
 
         a button:hover {
@@ -44,33 +45,48 @@
             background-color: #654E92;
             color: #EBD8B2;
             border-radius: 10px;
-            padding: 10px;
-            margin: 10px;
-            width: 50%; 
+            padding: 20px;
+            margin: 20px;
+            width: 50%;
             font-family: 'Helvetica', sans-serif;
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;   
         }
+
+        .info {
+            background-color: #EBD8B2;
+            color: #654E92;
+            border-radius: 10px;
+            border-color: #654E92;
+            padding: 20px;
+            margin: 20px;
+            width: 70%;
+            font-family: 'Helvetica', sans-serif;
+            text-align: center;
+        }
+
     </style>
 </head>
 </head>
 <body>
     <h1 class="fancy-text">Ho, ho, ho!</h1>
-    <p>Are you familiar with the Secret Santa term?</p>
+    <div class="info">
+        <p>Are you familiar with the Secret Santa term?</p>
+        <p>Secret Santa is a holiday tradition in which a group of people, often friends, family members, or coworkers, exchange gifts anonymously. Each participant in the group is assigned the name of another participant for whom they are responsible for buying a gift. </p>
+        <p>The identity of the gift giver is typically kept secret until the gifts are exchanged, adding an element of surprise and fun to the event. This application does the job FOR YOU! </p></p>
+        <p>Choose your preferable game option and have fun!</p>
+    </div>
     {% if user.is_authenticated %}
         <a href="/logged/"><button>My Profile</button></a>
         <a href="/quick-game/"><button>Quick Game</button></a>
-        <p class="info-paragraph">What I can find on profile</p>
+        <p class="info-paragraph">In MY PROFILE you get access to all your created elements - let's play some games!</p>
     {% else %}
         <a href="/quick-game/"><button>Quick Game</button></a>
         <a href="/login/"><button>Login</button></a>
         <a href="/register/"><button>Register</button></a>
-        <a href="/email-lookup/"><button>Check My Events</button></a>
-        <p class="info-paragraph">Info about check my events</p>
-        <p class="info-paragraph">Login Register 0 benefits</p>
+        <a href="/email-lookup/"><button>Check My Games</button></a>
+        <p class="info-paragraph">In CHECK MY GAMES section you can input your address email and check future games! (Only if your game has beedn created by logged user).</p>
+        <p class="info-paragraph">If you LOGIN or REGISTER you cget access to your own platform with created elements, schedule for your games and many more! Logged users' information are saved into database so you can easily acces them anytime. :)</p>
     {% endif %}
-    <p class="info-paragraph">This is info about quick game</p>
+        <p class="info-paragraph">In QUICK GAME section you can make a drawing and send emails to your friends immidietly. Remember - your data will not be saved!</p>
 </body>
 {% endblock %}

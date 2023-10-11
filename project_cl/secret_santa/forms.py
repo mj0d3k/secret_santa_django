@@ -91,7 +91,7 @@ class GroupForm(forms.ModelForm):
         model = Group
         fields = '__all__'
         widgets = {
-            'exchange_date': forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'}),
+            # 'exchange_date': forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'}),
             'creator': forms.HiddenInput(),
         }
 
@@ -177,12 +177,12 @@ class EmailLookupForm(forms.Form):
     email = forms.EmailField(label='Enter your email', required=True)
 
 
-class CustomPasswordResetForm(PasswordResetForm): # not sure if I will include this view
-    """
-    Form created for resetting password.
-    """
-    email = forms.EmailField(
-        label="Your Email",
-        max_length=254,
-        widget=forms.EmailInput(attrs={'autocomplete': 'email', 'class': 'form-control'})
-    )
+# class CustomPasswordResetForm(PasswordResetForm): # not sure if I will include this view
+#     """
+#     Form created for resetting password.
+#     """
+#     email = forms.EmailField(
+#         label="Your Email",
+#         max_length=254,
+#         widget=forms.EmailInput(attrs={'autocomplete': 'email', 'class': 'form-control'})
+#     )

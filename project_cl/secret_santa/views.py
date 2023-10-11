@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views import View
-from .forms import (CustomPasswordResetForm, EmailLookupForm, EventForm,
+from .forms import (EmailLookupForm, EventForm,
                     GameForm, GroupForm, ParticipantForm,
                     QucikGameForm, RegisterForm)
 from .models import Event, GiftPair, Group, Participant
@@ -485,20 +485,6 @@ class GameView(View):
             return HttpResponse("An error occurred. Please try again")
 
 
-
-class GiftPairs(View): # this view is not necessary
-    """
-    View for displaying gift pairs for given event.
-
-    Methods:
-        - get(self, request, event_id): Handles GET requests and renders the gift_pairs.html template.
-    """
-    def get(self, request, group_id):
-        group = get_object_or_404(Group, pk=group_id)
-        gift_pairs = GiftPair.objects.filter(group=group)
-        return render(request, 'gift_pairs.html', {'gift_pairs': gift_pairs})
-
-
 class MyGiftPairsView(View):
     """
     View for displaying gift pairs for logged user.
@@ -559,9 +545,9 @@ def success_view(request):
 ########### TO DO ############
 
 # MUST DO:
-# tests!!!
+# tests for Event and Player + tests clean up and docu
 # python anywhere BUT POSTGRES IS NOT AVALIABLE IN FREE OPTION?? -> FIND ANOTHER SOLUTION
-# desgin + description CLEAN UP + btns on pages
+# front end finish - maybe diff color and font
 
 
 # MUST BUT NOT FIRST PRIO:

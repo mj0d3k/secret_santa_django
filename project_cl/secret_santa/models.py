@@ -102,6 +102,7 @@ class GiftPair(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     date = models.DateField()
+    game_number = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f'Giver: {self.giver} -> Receiver: {self.receiver} (In group: {self.group} for event: {self.event})'

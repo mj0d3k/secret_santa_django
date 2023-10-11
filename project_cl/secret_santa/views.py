@@ -165,14 +165,6 @@ def register(request):
 
 
 class LoggedUserView(View):
-    """
-    View for logged user.
-    Allows user to mange their events, groups, players and gift pairs.
-    Provides links to other views and option for new draws.
-
-    Methods:
-        - get(self, request): Handles GET requests and renders the logged_user.html template.
-    """
     def get(self, request):
         user = request.user
         events = Event.objects.filter(organizer=user)
@@ -180,6 +172,22 @@ class LoggedUserView(View):
         players = Participant.objects.filter(creator=user)
         gift_pairs = GiftPair.objects.filter(event__organizer=user)
         events_with_draws = Event.objects.filter(giftpair__in=gift_pairs).distinct()
+        game_numbers = list(gift_pairs.values_list('game_number', flat=True).distinct())
+
+        game_data = []
+        for game_number in game_numbers:
+            game_pairs = gift_pairs.filter(game_number=game_number)
+            game_info = {
+                'game_number': game_number,
+                'group_name': game_pairs[0].group.name,
+                'event_name': game_pairs[0].event.name,
+                'date': game_pairs[0].date,
+                'price_limit': game_pairs[0].group.price_limit,
+                'pairs': game_pairs.values('giver__first_name', 'giver__last_name', 'receiver__first_name', 'receiver__last_name')
+
+            }
+            game_data.append(game_info)
+
         return render(request, "logged_user.html", {
             'user': user,
             'events': events,
@@ -187,6 +195,7 @@ class LoggedUserView(View):
             'players': players,
             'gift_pairs': gift_pairs,
             'events_with_draws': events_with_draws,
+            'game_data': game_data,  # Przekazujemy dane o grach do szablonu
         })
 
 
@@ -435,8 +444,10 @@ class GameView(View):
             max_price = group.price_limit
             currency = group.currency
 
-            # secret santa function logic
+            game_number = GiftPair.objects.latest('id').id + 1 if GiftPair.objects.exists() else 1
+
             random.shuffle(participants)
+
             for i in range(len(participants)):
                 giver_name, giver_email = participants[i]
                 next_index = (i+1) % len(participants)
@@ -450,11 +461,11 @@ class GameView(View):
                     receiver=receiver,
                     event=event,
                     group=group,
-                    date=date
+                    date=date,
+                    game_number=game_number
                 )
                 gift_pair.save()
 
-                # sending emails logic
                 subject = 'Secret Santa'
                 message = f'Hi {giver.name},\n\nYou are {receiver.name}\'s Secret Santa!'
                 message += f'\n\nThe maximum price for gifts is {max_price} {currency}.'
@@ -465,10 +476,9 @@ class GameView(View):
                 send_mail(subject, message, email_from, recipient_list)
 
             return redirect('base')
-            # return HttpResponse('success')
-            # return redirect('gift-pairs', group_id=group.id)
         else:
-            return HttpResponse("An error occured. Please try again")
+            return HttpResponse("An error occurred. Please try again")
+
 
 
 class GiftPairs(View): # this view is not necessary
@@ -540,8 +550,6 @@ class LookupView(View):
 
 # MUST DO:
 # tests!!!
-# event names apprear more than once
-# create special gmail account !! cant find the name but it is easy btw
 # python anywhere BUT POSTGRES IS NOT AVALIABLE IN FREE OPTION?? -> FIND ANOTHER SOLUTION
 # desgin + description CLEAN UP + btns on pages
 # some succes / error templates would be nice

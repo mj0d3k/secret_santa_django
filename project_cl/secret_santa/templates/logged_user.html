@@ -121,7 +121,6 @@
             justify-content: center;
             align-items: center;
         }
-
         
 
     </style>
@@ -143,27 +142,28 @@
     <div class="main content">
 
         <h1>Games created by me</h1>
-        <a href="/new-game/"><button>New game</button></a>
 
-        {% regroup gift_pairs by event as event_list %}
-
-        {% for event in event_list %}
-            <h2>Event: {{ event.grouper.name }}</h2>
-            {% regroup event.list by group as group_list %}
-            {% for group in group_list %}
+        <ul>
+            {% for game in game_data %}
+                <li>
+                    Game Number: {{ game.game_number }}
+                    | Group: {{ game.group_name }} | Event: {{ game.event_name }} | Date: {{ game.date }} | Price limit: {{ game.price_limit }}
+                </li>
                 <div class="group-container">
-                    <h3>Group: {{ group.grouper.name }} for date: {{ group.list.0.date }}</h3>
-                    <ul class="hidden" style="display: none;">
-                        {% for pair in group.list %}
-                            <li>Giver: {{ pair.giver.name }} -> Receiver: {{ pair.receiver.name }}</li>
-                        {% endfor %}
-                    </ul>
-                    <button class="reveal-button" data-group="{{ group.grouper.name }}">Reveal</button>
-                </div>
+                <ul class="hidden" style="display: none;">
+                    {% for pair in game.pairs %}
+                    <li>
+                        Pair: {{ pair.giver__first_name }} {{ pair.giver__last_name }} {{ pair.giver__last_name }}-> {{ pair.receiver__first_name }} {{ pair.receiver__last_name }}
+                    </li>
+                    {% endfor %}
+                </ul>
+                <button class="reveal-button" data-group="{{ game.game_number }}">Reveal</button>
+            </div>
             {% endfor %}
-        {% endfor %}
-
-
+        </ul>
+        
+        
+        <a href="/new-game/"><button>New game</button></a>
 
     <h1>Your created events:</h1>
     <ul>
@@ -214,15 +214,16 @@
                 const groupContainer = button.parentElement.querySelector('.hidden');
                 if (groupContainer.style.display === 'none' || groupContainer.style.display === '') {
                     groupContainer.style.display = 'block';
-                    button.textContent = 'Hide'; // Change button text to "Hide"
+                    button.textContent = 'Hide';
                 } else {
                     groupContainer.style.display = 'none';
-                    button.textContent = 'Reveal'; // Change button text back to "Reveal"
+                    button.textContent = 'Reveal';
                 }
             });
         });
     });
 </script>
+
 
 {% endblock %}
 
@@ -231,7 +232,7 @@
 <footer>
     <div class="footer-container">
     <p>Created by - <a class="author-link" href="https://github.com/mj0d3k?tab=repositories">mj0d3k</a></p>
-    <p class="mail-help">Get help: mail@soon</p>
+    <p class="mail-help">Get help: mj0d3k.py@gmail.com</p>
     </div>
 </footer>
 {% endblock %}

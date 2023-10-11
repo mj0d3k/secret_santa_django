@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+    <title>Secret Santa</title>
+    <style>
+        body {
+            background-color: #EBD8B2;
+            font-family: 'Helvetica', sans-serif;
+        }
+
+        h1 {
+            color: #654E92;
+            font-family: 'Pixelify Sans', sans-serif;
+        }
+
+        a button {
+            background-color:#A5C0DD;
+            color: #654E92;
+            cursor: pointer;
+            font-size: 20px;
+            text-decoration: none;
+            margin: 0 10px;
+            padding: 15px 15px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Helvetica', sans-serif;
+            font-weight: normal;
+            display: inline-block; 
+        }
+
+        a button:hover {
+            background-color: #654E92;
+            color: #EBD8B2;
+        }
+
+        .fancy-text {
+            font-family: 'Helvetica', sans-serif;
+            font-size: 40px;
+            color: #654E92;
+            padding: 20px;
+        }
+
+        .info-paragraph {
+            background-color: #654E92;
+            color: #EBD8B2;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px;
+            width: 50%;
+            font-family: 'Helvetica', sans-serif;
+            text-align: center;
+        }
+
+        .info {
+            background-color: #EBD8B2;
+            color: #654E92;
+            border-radius: 10px;
+            border-color: #654E92;
+            padding: 20px;
+            margin: 20px;
+            width: 70%;
+            font-family: 'Helvetica', sans-serif;
+            text-align: center;
+        }
+
+    </style>
+</head>
+</head>
+<body>
+    <h1 class="fancy-text">Ho, ho, ho!</h1>
+    <div class="info">
+        <p>Your Secret Santa games have been successfully created and emails have been sent to the participants. Everyone is now ready to enjoy the holiday tradition of exchanging gifts anonymously.</p>
+        <p>The identity of the gift giver is typically kept secret until the gifts are exchanged, adding an element of surprise and fun to the event. This application does the job FOR YOU! </p></p>
+        <p>Remember, the identity of the gift giver is a well-kept secret until the gifts are exchanged, adding an element of surprise and fun to the event.</p>
+        <p>Thank you for using our application to make the gift exchange process more enjoyable!</p>
+    </div>
+    {% if user.is_authenticated %}
+        <a href="/logged/"><button>My Profile</button></a>
+        <a href="/quick-game/"><button>Quick Game</button></a>
+        <p class="info-paragraph">In MY PROFILE you get access to all your created elements - let's play some games!</p>
+    {% else %}
+        <a href="/quick-game/"><button>Quick Game</button></a>
+        <a href="/login/"><button>Login</button></a>
+        <a href="/register/"><button>Register</button></a>
+        <a href="/email-lookup/"><button>Check My Games</button></a>
+        <p class="info-paragraph">In CHECK MY GAMES section you can input your address email and check future games! (Only if your game has beedn created by logged user).</p>
+        <p class="info-paragraph">If you LOGIN or REGISTER you cget access to your own platform with created elements, schedule for your games and many more! Logged users' information are saved into database so you can easily acces them anytime. :)</p>
+    {% endif %}
+        <p class="info-paragraph">In QUICK GAME section you can make a drawing and send emails to your friends immidietly. Remember - your data will not be saved!</p>
+</body>
+{% endblock %}

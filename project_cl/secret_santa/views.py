@@ -65,7 +65,8 @@ class QuickGameView(View):
 
             secret_santa(participants, max_price, currency, date)
 
-            return HttpResponse("All emails have been successfully sent! Enjoy your `Secret Santa` game!") # succes page with back btn
+            # return HttpResponse("All emails have been successfully sent! Enjoy your `Secret Santa` game!") # succes page with back btn
+            return redirect('success')
         else:
             return HttpResponse("error: Invalid form data")
 
@@ -475,7 +476,9 @@ class GameView(View):
                 recipient_list = [giver.email]
                 send_mail(subject, message, email_from, recipient_list)
 
-            return redirect('base')
+            # return redirect('base')
+            return redirect('success')
+        
         else:
             return HttpResponse("An error occurred. Please try again")
 
@@ -545,6 +548,9 @@ class LookupView(View):
         return render(request, 'lookup.html', {'form': form})
 
 
+def success_view(request):
+    return render(request, 'success.html')
+
 
 ########### TO DO ############
 
@@ -552,8 +558,6 @@ class LookupView(View):
 # tests!!!
 # python anywhere BUT POSTGRES IS NOT AVALIABLE IN FREE OPTION?? -> FIND ANOTHER SOLUTION
 # desgin + description CLEAN UP + btns on pages
-# some succes / error templates would be nice
-# gift pairs view must be deleted - better to create succes view that can be used more than once with main page btn
 
 
 # MUST BUT NOT FIRST PRIO:

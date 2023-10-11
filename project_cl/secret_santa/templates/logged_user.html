@@ -145,6 +145,7 @@
         
         <a href="/new-game/"><button>New game</button></a>
 
+    <div class="section-container"></div>
         <h1>Your created events:</h1>
         <ul>
             {% for event in events %}
@@ -153,9 +154,11 @@
                 <a href="/delete-event/{{ event.id }}/">Delete</a>
             {% endfor %}
         </ul>
-
+        
         <a href="/add-event/"><button>Add event</button></a>
+    </div>
 
+    <div class="section-container">
         <h1>Your created groups:</h1>
         <ul>
             {% for group in groups %}
@@ -170,7 +173,9 @@
             {% endfor %}
         </ul>
         <a href="/add-group/"><button>Add group</button></a>
+    </div>
 
+    <div class="section-container">
         <h1>Your created players:</h1>
         <ul>
             {% for person in players %}
@@ -180,7 +185,7 @@
             {% endfor %}
         </ul>
         <a href="/add-player/"><button>Add player</button></a>
-
+    </div>
     </div>
 
     <script>

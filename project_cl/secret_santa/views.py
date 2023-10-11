@@ -167,6 +167,7 @@ def register(request):
 
 class LoggedUserView(View):
     def get(self, request):
+        today = date.today()
         user = request.user
         events = Event.objects.filter(organizer=user)
         groups = Group.objects.filter(creator=user)
@@ -196,7 +197,8 @@ class LoggedUserView(View):
             'players': players,
             'gift_pairs': gift_pairs,
             'events_with_draws': events_with_draws,
-            'game_data': game_data,  # Przekazujemy dane o grach do szablonu
+            'game_data': game_data,
+            'today': today
         })
 
 
@@ -550,6 +552,8 @@ class LookupView(View):
 
 def success_view(request):
     return render(request, 'success.html')
+
+
 
 
 ########### TO DO ############

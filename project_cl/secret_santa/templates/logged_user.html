@@ -145,20 +145,22 @@
 
         <ul>
             {% for game in game_data %}
-                <li>
-                    <!-- Game Number: {{ game.game_number }} -->
-                    Group: {{ game.group_name }} | Event: {{ game.event_name }} | Date: {{ game.date }} | Price limit: {{ game.price_limit }}
-                </li>
-                <div class="group-container">
-                <ul class="hidden" style="display: none;">
-                    {% for pair in game.pairs %}
+                {% if game.date >= today %}
                     <li>
-                        Pair: {{ pair.giver__first_name }} {{ pair.giver__last_name }} {{ pair.giver__last_name }}-> {{ pair.receiver__first_name }} {{ pair.receiver__last_name }}
+                        <!-- Game Number: {{ game.game_number }} -->
+                        Group: {{ game.group_name }} | Event: {{ game.event_name }} | Date: {{ game.date }} | Price limit: {{ game.price_limit }}
                     </li>
-                    {% endfor %}
-                </ul>
-                <button class="reveal-button" data-group="{{ game.game_number }}">Reveal</button>
-            </div>
+                    <div class="group-container">
+                        <ul class="hidden" style="display: none;">
+                            {% for pair in game.pairs %}
+                                <li>
+                                    Pair: {{ pair.giver__first_name }} {{ pair.giver__last_name }} -> {{ pair.receiver__first_name }} {{ pair.receiver__last_name }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <button class="reveal-button" data-group="{{ game.game_number }}">Reveal</button>
+                    </div>
+                {% endif %}
             {% endfor %}
         </ul>
         

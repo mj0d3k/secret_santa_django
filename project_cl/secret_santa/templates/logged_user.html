@@ -52,17 +52,18 @@
             margin-top: 60px;
         }
 
-        a.author-link {
-            color: #EBD8B2;
-            font-weight: bold;
+        .games-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            overflow: auto;
+            max-height:180px;
         }
 
-        .mail-help {
-            font-weight: normal;
-        }
-
-        .blank-el-for-footer {
-            margin-bottom: 100px;
+        .result-item {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
         }
 
         a button {
@@ -103,26 +104,6 @@
             color: #EBD8B2;
         }
 
-        footer {
-            background-color: #654E92;
-            color: #A5C0DD;
-            padding: 10px 0;
-            position: fixed;
-            bottom: 10;
-            width: 100%;
-            font-weight: bold;
-            height: 20px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .footer-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-
     </style>
     <div class="info-bar">
         <div class="menu-container">
@@ -143,14 +124,12 @@
 
         <h1>Games created by me</h1>
 
-        <ul>
+        <div class="games-container">
             {% for game in game_data %}
                 {% if game.date >= today %}
-                    <li>
+                    <div class="result-item">
                         <!-- Game Number: {{ game.game_number }} -->
                         Group: {{ game.group_name }} | Event: {{ game.event_name }} | Date: {{ game.date }} | Price limit: {{ game.price_limit }}
-                    </li>
-                    <div class="group-container">
                         <ul class="hidden" style="display: none;">
                             {% for pair in game.pairs %}
                                 <li>
@@ -162,70 +141,66 @@
                     </div>
                 {% endif %}
             {% endfor %}
-        </ul>
-        
+        </div>
         
         <a href="/new-game/"><button>New game</button></a>
 
-    <h1>Your created events:</h1>
-    <ul>
-        {% for event in events %}
-            <li>{{ event.name }} | {{ event.date }} | {{ event.description }} | {{ event.organizer }}</li>
-            <a href="/edit-event/{{ event.id }}/">Edit</a>
-            <a href="/delete-event/{{ event.id }}/">Delete</a>
-        {% endfor %}
-    </ul>
+        <h1>Your created events:</h1>
+        <ul>
+            {% for event in events %}
+                <li>{{ event.name }} | {{ event.date }} | {{ event.description }} | {{ event.organizer }}</li>
+                <a href="/edit-event/{{ event.id }}/">Edit</a>
+                <a href="/delete-event/{{ event.id }}/">Delete</a>
+            {% endfor %}
+        </ul>
 
-    <a href="/add-event/"><button>Add event</button></a>
+        <a href="/add-event/"><button>Add event</button></a>
 
+        <h1>Your created groups:</h1>
+        <ul>
+            {% for group in groups %}
+                <li>{{ group.name }} | {{ group.exchange_date }} | {{ group.price_limit }} | {{ group.creator }}</li>
+                <a href="/edit-group/{{ group.id }}/">Edit</a>
+                <a href="/delete-group/{{ group.id }}/">Delete</a>
+                <ul>
+                    {% for participant in group.participants.all %}
+                        <li>{{ participant.name }} | {{ participant.email }} | {{ participant.wishlist }}</li>
+                    {% endfor %}
+                </ul>
+            {% endfor %}
+        </ul>
+        <a href="/add-group/"><button>Add group</button></a>
 
-    <h1>Your created groups:</h1>
-    <ul>
-        {% for group in groups %}
-            <li>{{ group.name }} | {{ group.exchange_date }} | {{ group.price_limit }} | {{ group.creator }}</li>
-            <a href="/edit-group/{{ group.id }}/">Edit</a>
-            <a href="/delete-group/{{ group.id }}/">Delete</a>
-            <ul>
-                {% for participant in group.participants.all %}
-                    <li>{{ participant.name }} | {{ participant.email }} | {{ participant.wishlist }}</li>
-                {% endfor %}
-            </ul>
-        {% endfor %}
-    </ul>
-    <a href="/add-group/"><button>Add group</button></a>
+        <h1>Your created players:</h1>
+        <ul>
+            {% for person in players %}
+                <li>{{ person.name }} | {{ person.email }} | {{ person.wishlist }}</li>
+                <a href="/edit-player/{{ person.id }}/">Edit</a>
+                <a href="/delete-player/{{ person.id }}/">Delete</a>
+            {% endfor %}
+        </ul>
+        <a href="/add-player/"><button>Add player</button></a>
 
-    <h1>Your created players:</h1>
-    <ul>
-        {% for person in players %}
-            <li>{{ person.name }} | {{ person.email }} | {{ person.wishlist }}</li>
-            <a href="/edit-player/{{ person.id }}/">Edit</a>
-            <a href="/delete-player/{{ person.id }}/">Delete</a>
-        {% endfor %}
-    </ul>
-    <a href="/add-player/"><button>Add player</button></a>
+    </div>
 
-
-</div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const revealButtons = document.querySelectorAll('.reveal-button');
-        revealButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const groupName = button.getAttribute('data-group');
-                const groupContainer = button.parentElement.querySelector('.hidden');
-                if (groupContainer.style.display === 'none' || groupContainer.style.display === '') {
-                    groupContainer.style.display = 'block';
-                    button.textContent = 'Hide';
-                } else {
-                    groupContainer.style.display = 'none';
-                    button.textContent = 'Reveal';
-                }
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const revealButtons = document.querySelectorAll('.reveal-button');
+            revealButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const groupName = button.getAttribute('data-group');
+                    const groupContainer = button.parentElement.querySelector('.hidden');
+                    if (groupContainer.style.display === 'none' || groupContainer.style.display === '') {
+                        groupContainer.style.display = 'block';
+                        button.textContent = 'Hide';
+                    } else {
+                        groupContainer.style.display = 'none';
+                        button.textContent = 'Reveal';
+                    }
+                });
             });
         });
-    });
-</script>
-
+    </script>
 
 {% endblock %}
 
@@ -233,8 +208,8 @@
 <div class="blank-el-for-footer"></div>
 <footer>
     <div class="footer-container">
-    <p>Created by - <a class="author-link" href="https://github.com/mj0d3k?tab=repositories">mj0d3k</a></p>
-    <p class="mail-help">Get help: mj0d3k.py@gmail.com</p>
+        <p>Created by - <a class="author-link" href="https://github.com/mj0d3k?tab=repositories">mj0d3k</a></p>
+        <p class="mail-help">Get help: mj0d3k.py@gmail.com</p>
     </div>
 </footer>
 {% endblock %}

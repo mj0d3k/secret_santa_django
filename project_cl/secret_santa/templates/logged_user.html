@@ -29,7 +29,7 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
-            height: 30px;
+            height: 35px;
             font-size: 16px;
         }
 
@@ -54,11 +54,14 @@
 
         .games-container {
             display: grid;
-            background-color: #DDF7E3;
+            /* background-color: #DDF7E3; */
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
             overflow: auto;
-            max-height: 180px;
+            max-height: 3000px;
+            margin-bottom: 20px;
+            margin-left: 20px;
+            margin-right: 20px;
         }
 
         .result-item {
@@ -77,10 +80,12 @@
             text-decoration: none;
             margin: 0 10px;
             padding: 10px 10px;
-            border: none;
             border-radius: 10px;
             font-family: 'Helvetica', sans-serif;
             font-weight: normal;
+            border-color: #DF2E38;
+            border-style: dotted;
+            border-width: 2px;
         }
 
         a button:hover {
@@ -107,19 +112,29 @@
             color: #FFFDFA;
         }
 
-        /* .section-container {
-            display: flex;
-            gap: 20px;
-        }
-
-        .section {
-            flex: 1;
-            max-width: 300px;
-        } */
-
         .h1 {
             color: #DF2E38;
             font-family: 'Helvetica', sans-serif;
+            margin-top: 15px;
+        }
+
+        .section-container {
+            background-color: #DDF7E3;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid;
+            border-color: #5D9C59;
+            margin: 10px;
+            flex: 1;
+            margin: 40px 40px 40px 40px;
+            
+        }
+
+        .section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            font-size: 16px;
         }
 
     </style>
@@ -164,9 +179,9 @@
             </div>
     </div>  
             <a href="/new-game/"><button>New game</button></a>
-
-        <div class="section-container"></div>
-            <div class="section"></div>
+    
+    <div class="section">
+        <div class="section-container">
             <h1 class="h1">Your created events:</h1>
             <ul>
                 {% for event in events %}
@@ -178,7 +193,7 @@
             
             <a href="/add-event/"><button>Add event</button></a>
         </div>
-
+    
         <div class="section-container">
             <h1 class="h1">Your created groups:</h1>
             <ul>
@@ -208,6 +223,7 @@
             <a href="/add-player/"><button>Add player</button></a>
         </div>
     </div>
+</div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

@@ -1,5 +1,6 @@
 # vsc
 .vscode/
+.settings.json
 
 # email data
 .env

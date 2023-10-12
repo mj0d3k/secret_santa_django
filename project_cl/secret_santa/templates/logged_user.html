@@ -28,6 +28,7 @@
             justify-content: space-between;
             align-items: center;
             max-width: 1200px;
+            /* background-color: #DF2E38; */
             margin: 0 auto;
             padding: 0 20px;
         }
@@ -61,9 +62,13 @@
         }
 
         .result-item {
-            background-color: #fff;
+            background-color: #EBD8B2;
             padding: 20px;
             border-radius: 10px;
+            border: 2px solid;
+            border-color: #654E92;
+            /* color:#654E92; */
+            /* font-weight: bold; */
         }
 
         a button {
@@ -104,6 +109,16 @@
             color: #EBD8B2;
         }
 
+        .section-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .section {
+            flex: 1;
+            max-width: 300px;
+        }
+
     </style>
     <div class="info-bar">
         <div class="menu-container">
@@ -122,70 +137,71 @@
 
     <div class="main content">
 
-        <h1>Games created by me</h1>
+            <h1>Games created by me</h1>
 
-        <div class="games-container">
-            {% for game in game_data %}
-                {% if game.date >= today %}
-                    <div class="result-item">
-                        <!-- Game Number: {{ game.game_number }} -->
-                        Group: {{ game.group_name }} | Event: {{ game.event_name }} | Date: {{ game.date }} | Price limit: {{ game.price_limit }}
-                        <ul class="hidden" style="display: none;">
-                            {% for pair in game.pairs %}
-                                <li>
-                                    Pair: {{ pair.giver__first_name }} {{ pair.giver__last_name }} -> {{ pair.receiver__first_name }} {{ pair.receiver__last_name }}
-                                </li>
-                            {% endfor %}
-                        </ul>
-                        <button class="reveal-button" data-group="{{ game.game_number }}">Reveal</button>
-                    </div>
-                {% endif %}
-            {% endfor %}
+            <div class="games-container">
+                {% for game in game_data %}
+                    {% if game.date >= today %}
+                        <div class="result-item">
+                            <!-- Game Number: {{ game.game_number }} -->
+                            Group: {{ game.group_name }} | Event: {{ game.event_name }} | Date: {{ game.date }} | Price limit: {{ game.price_limit }}
+                            <ul class="hidden" style="display: none;">
+                                {% for pair in game.pairs %}
+                                    <li>
+                                        Pair: {{ pair.giver__first_name }} {{ pair.giver__last_name }} -> {{ pair.receiver__first_name }} {{ pair.receiver__last_name }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            <button class="reveal-button" data-group="{{ game.game_number }}">Reveal</button>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+    </div>  
+            <a href="/new-game/"><button>New game</button></a>
+
+        <div class="section-container"></div>
+            <div class="section"></div>
+            <h1>Your created events:</h1>
+            <ul>
+                {% for event in events %}
+                    <li>{{ event.name }} | {{ event.date }} | {{ event.description }} | {{ event.organizer }}</li>
+                    <a href="/edit-event/{{ event.id }}/">Edit</a>
+                    <a href="/delete-event/{{ event.id }}/">Delete</a>
+                {% endfor %}
+            </ul>
+            
+            <a href="/add-event/"><button>Add event</button></a>
         </div>
-        
-        <a href="/new-game/"><button>New game</button></a>
 
-    <div class="section-container"></div>
-        <h1>Your created events:</h1>
-        <ul>
-            {% for event in events %}
-                <li>{{ event.name }} | {{ event.date }} | {{ event.description }} | {{ event.organizer }}</li>
-                <a href="/edit-event/{{ event.id }}/">Edit</a>
-                <a href="/delete-event/{{ event.id }}/">Delete</a>
-            {% endfor %}
-        </ul>
-        
-        <a href="/add-event/"><button>Add event</button></a>
-    </div>
+        <div class="section-container">
+            <h1>Your created groups:</h1>
+            <ul>
+                {% for group in groups %}
+                    <li>{{ group.name }} | {{ group.exchange_date }} | {{ group.price_limit }} | {{ group.creator }}</li>
+                    <a href="/edit-group/{{ group.id }}/">Edit</a>
+                    <a href="/delete-group/{{ group.id }}/">Delete</a>
+                    <ul>
+                        {% for participant in group.participants.all %}
+                            <li>{{ participant.name }} | {{ participant.email }} | {{ participant.wishlist }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endfor %}
+            </ul>
+            <a href="/add-group/"><button>Add group</button></a>
+        </div>
 
-    <div class="section-container">
-        <h1>Your created groups:</h1>
-        <ul>
-            {% for group in groups %}
-                <li>{{ group.name }} | {{ group.exchange_date }} | {{ group.price_limit }} | {{ group.creator }}</li>
-                <a href="/edit-group/{{ group.id }}/">Edit</a>
-                <a href="/delete-group/{{ group.id }}/">Delete</a>
-                <ul>
-                    {% for participant in group.participants.all %}
-                        <li>{{ participant.name }} | {{ participant.email }} | {{ participant.wishlist }}</li>
-                    {% endfor %}
-                </ul>
-            {% endfor %}
-        </ul>
-        <a href="/add-group/"><button>Add group</button></a>
-    </div>
-
-    <div class="section-container">
-        <h1>Your created players:</h1>
-        <ul>
-            {% for person in players %}
-                <li>{{ person.name }} | {{ person.email }} | {{ person.wishlist }}</li>
-                <a href="/edit-player/{{ person.id }}/">Edit</a>
-                <a href="/delete-player/{{ person.id }}/">Delete</a>
-            {% endfor %}
-        </ul>
-        <a href="/add-player/"><button>Add player</button></a>
-    </div>
+        <div class="section-container">
+            <h1>Your created players:</h1>
+            <ul>
+                {% for person in players %}
+                    <li>{{ person.name }} | {{ person.email }} | {{ person.wishlist }}</li>
+                    <a href="/edit-player/{{ person.id }}/">Edit</a>
+                    <a href="/delete-player/{{ person.id }}/">Delete</a>
+                {% endfor %}
+            </ul>
+            <a href="/add-player/"><button>Add player</button></a>
+        </div>
     </div>
 
     <script>

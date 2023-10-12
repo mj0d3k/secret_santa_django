@@ -547,7 +547,6 @@ def success_view(request):
 # MUST DO:
 # tests for Event and Player + tests clean up and docu
 # python anywhere BUT POSTGRES IS NOT AVALIABLE IN FREE OPTION?? -> FIND ANOTHER SOLUTION
-# front end finish - maybe diff color and font
 
 
 # MUST BUT NOT FIRST PRIO:

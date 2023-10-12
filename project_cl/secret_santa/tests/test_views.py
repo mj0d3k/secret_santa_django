@@ -233,3 +233,125 @@ class DeleteAccountViewTest(TestCase):
         self.assertTemplateUsed(response, 'user_delete_confirm.html')
 
 
+## EVENT SECTION ###
+
+class EventTests(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+
+    def test_add_event_view_for_authenticated_user(self):
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.get(reverse('add-event'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_add_event_view_form_submission(self):
+        self.client.login(username='testuser', password='testpassword')
+        data = {
+            'name': 'Test Event',
+            'description': 'This is a test event',
+            'organizer': self.user.id
+        }
+        response = self.client.post(reverse('add-event'), data)
+        self.assertEqual(response.status_code, 302)
+
+    def test_edit_event_view_for_authenticated_user(self):
+        event = Event.objects.create(name='Test Event', description='This is a test event', organizer=self.user)
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.get(reverse('edit-event', args=[event.id]))
+        self.assertEqual(response.status_code, 200)
+
+    def test_edit_event_view_form_submission(self):
+        event = Event.objects.create(name='Test Event', description='This is a test event', organizer=self.user)
+        self.client.login(username='testuser', password='testpassword')
+        data = {
+            'name': 'Updated Event',
+            'description': 'This is an updated event',
+            'organizer': self.user.id
+        }
+        response = self.client.post(reverse('edit-event', args=[event.id]), data)
+        self.assertEqual(response.status_code, 302)
+
+    def test_delete_event_view_for_authenticated_user(self):
+        event = Event.objects.create(name='Test Event', description='This is a test event', organizer=self.user)
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.get(reverse('delete-event', args=[event.id]))
+        self.assertEqual(response.status_code, 200)
+
+    def test_delete_event_view_form_submission(self):
+        event = Event.objects.create(name='Test Event', description='This is a test event', organizer=self.user)
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.post(reverse('delete-event', args=[event.id]))
+        self.assertEqual(response.status_code, 302) 
+
+
+## GROUP SECTION ###
+
+## TO DO ###
+
+## PLAYER SECTION ###
+
+## TO DO ###
+
+## functions from views.py ###
+
+class RegisterViewTests(TestCase):
+    def test_register_view_available(self):
+        response = self.client.get(reverse('register'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_register_user_with_existing_username(self):
+        User.objects.create_user('testuser', 'test@example.com', 'testpassword123')
+
+        data = {
+            'username': 'testuser',
+            'password1': 'testpassword123',
+            'password2': 'testpassword123',
+        }
+        response = self.client.post(reverse('register'), data)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(User.objects.filter(username='testuser').count(), 1)
+
+
+class SuccessViewTests(TestCase):
+    def test_success_view_available(self):
+        response = self.client.get(reverse('success'))
+        self.assertEqual(response.status_code, 200)
+
+class SecretSantaTests(TestCase):
+
+    def test_secret_santa_no_participants(self):
+        participants = []
+        max_price = 50
+        currency = 'USD'
+        date = '2023-12-25'
+
+        secret_santa(participants, max_price, currency, date)
+
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_secret_santa_valid_participants(self):
+        participants = [
+            ('A', 'a@example.com'),
+            ('B', 'b@example.com'),
+            ('C', 'c@example.com'),
+        ]
+        max_price = 50
+        currency = 'USD'
+        date = '2023-12-25'
+
+        random.seed(42)
+
+        secret_santa(participants, max_price, currency, date)
+
+        self.assertEqual(len(mail.outbox), len(participants))
+
+        for i, (name, email) in enumerate(participants):
+            expected_subject = 'Secret Santa'
+            expected_message = f'Hi {name},\n\nYou are {participants[(i+1)%len(participants)][0]}\'s Secret Santa!'
+            expected_message += f'\n\nThe maximum price for gifts is {max_price} {currency}.'
+            expected_message += f'\nThe exchange date is {date}.'
+            expected_message += f'\n\nBest wishes,\nSecret Santa'
+            self.assertEqual(mail.outbox[i].subject, expected_subject)
+            self.assertEqual(mail.outbox[i].body, expected_message)

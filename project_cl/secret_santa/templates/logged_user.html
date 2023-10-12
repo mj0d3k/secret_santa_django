@@ -3,10 +3,9 @@
 {% block content %}
 </head>
 <body>
-
     <style>
         body {
-            background-color: #EBD8B2;
+            background-color: #FFFDFA;
             font-family: 'Helvetica', sans-serif;
             text-align: left;
             margin: 0;
@@ -14,8 +13,8 @@
         }
 
         .info-bar {
-            background-color: #654E92;
-            color: #A5C0DD;
+            background-color: #DDF7E3;
+            color: #DF2E38;
             padding: 10px 0;
             position: fixed;
             top: 0;
@@ -28,13 +27,14 @@
             justify-content: space-between;
             align-items: center;
             max-width: 1200px;
-            /* background-color: #DF2E38; */
             margin: 0 auto;
             padding: 0 20px;
+            height: 30px;
+            font-size: 16px;
         }
 
         .menu-link {
-            color: #EBD8B2;
+            color: #5D9C59;
             text-decoration: none;
             font-weight: bold;
             margin: 0 20px;
@@ -45,8 +45,7 @@
         }
 
         .user-info {
-            color: #A5C0DD;
-            font-weight: bold;
+            color: #DF2E38;
         }
 
         .main.content {
@@ -55,25 +54,24 @@
 
         .games-container {
             display: grid;
+            background-color: #DDF7E3;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
             overflow: auto;
-            max-height:180px;
+            max-height: 180px;
         }
 
         .result-item {
-            background-color: #EBD8B2;
+            background-color: #FFFDFA;
             padding: 20px;
             border-radius: 10px;
             border: 2px solid;
-            border-color: #654E92;
-            /* color:#654E92; */
-            /* font-weight: bold; */
+            border-color: #5D9C59;
         }
 
         a button {
-            background-color:#A5C0DD;
-            color: #654E92;
+            background-color: #C7E8CA;
+            color: #5D9C59;
             cursor: pointer;
             font-size: 15px;
             text-decoration: none;
@@ -86,13 +84,13 @@
         }
 
         a button:hover {
-            background-color: #654E92;
-            color: #EBD8B2;
+            background-color: #5D9C59;
+            color: #FFFDFA;
         }
 
         .reveal-button {
-            background-color:#A5C0DD;
-            color: #654E92;
+            background-color: #C7E8CA;
+            color: #5D9C59;
             cursor: pointer;
             font-size: 15px;
             text-decoration: none;
@@ -105,11 +103,11 @@
         }
 
         .reveal-button:hover {
-            background-color: #654E92;
-            color: #EBD8B2;
+            background-color: #5D9C59;
+            color: #FFFDFA;
         }
 
-        .section-container {
+        /* .section-container {
             display: flex;
             gap: 20px;
         }
@@ -117,9 +115,16 @@
         .section {
             flex: 1;
             max-width: 300px;
+        } */
+
+        .h1 {
+            color: #DF2E38;
+            font-family: 'Helvetica', sans-serif;
         }
 
     </style>
+    {% block lights %}
+    {% endblock %}
     <div class="info-bar">
         <div class="menu-container">
             <span class="user-info">User logged: {{ user.username }}</span>
@@ -137,7 +142,7 @@
 
     <div class="main content">
 
-            <h1>Games created by me</h1>
+            <h1 class="h1">Games created by me</h1>
 
             <div class="games-container">
                 {% for game in game_data %}
@@ -162,7 +167,7 @@
 
         <div class="section-container"></div>
             <div class="section"></div>
-            <h1>Your created events:</h1>
+            <h1 class="h1">Your created events:</h1>
             <ul>
                 {% for event in events %}
                     <li>{{ event.name }} | {{ event.date }} | {{ event.description }} | {{ event.organizer }}</li>
@@ -175,7 +180,7 @@
         </div>
 
         <div class="section-container">
-            <h1>Your created groups:</h1>
+            <h1 class="h1">Your created groups:</h1>
             <ul>
                 {% for group in groups %}
                     <li>{{ group.name }} | {{ group.exchange_date }} | {{ group.price_limit }} | {{ group.creator }}</li>
@@ -192,7 +197,7 @@
         </div>
 
         <div class="section-container">
-            <h1>Your created players:</h1>
+            <h1 class="h1">Your created players:</h1>
             <ul>
                 {% for person in players %}
                     <li>{{ person.name }} | {{ person.email }} | {{ person.wishlist }}</li>

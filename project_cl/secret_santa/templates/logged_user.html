@@ -20,6 +20,7 @@
             top: 0;
             width: 100%;
             z-index: 1;
+            border-bottom: #DF2E38 dotted 2px;
         }
 
         .menu-container {
@@ -118,16 +119,23 @@
             margin-top: 15px;
         }
 
+        .h1-main {
+            color: #DF2E38;
+            margin-top: 10px;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            display: inline-flex;
+        }
+
         .section-container {
             background-color: #DDF7E3;
             padding: 20px;
             border-radius: 10px;
             border: 2px solid;
             border-color: #5D9C59;
-            margin: 10px;
+            margin: 0px;
             flex: 1;
             margin: 40px 40px 40px 40px;
-            
         }
 
         .section {
@@ -157,8 +165,8 @@
 
     <div class="main content">
 
-            <h1 class="h1">Games created by me</h1>
-
+            <h1 class="h1-main">Your created games</h1>
+            <a href="/new-game/"><button>New game</button></a>
             <div class="games-container">
                 {% for game in game_data %}
                     {% if game.date >= today %}
@@ -178,7 +186,6 @@
                 {% endfor %}
             </div>
     </div>  
-            <a href="/new-game/"><button>New game</button></a>
     
     <div class="section">
         <div class="section-container">

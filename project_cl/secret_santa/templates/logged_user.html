@@ -54,7 +54,6 @@
 
         .games-container {
             display: grid;
-            /* background-color: #DDF7E3; */
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
             overflow: auto;
@@ -74,17 +73,16 @@
 
         a button {
             background-color: #C7E8CA;
-            color: #5D9C59;
-            cursor: pointer;
+            color: #DF2E38;
             font-size: 15px;
             font-family: 'Esteban', serif;
             margin: 0 10px;
             padding: 10px 10px;
             border-radius: 10px;
             font-weight: normal;
-            border-color: #DF2E38;
-            border-style: dotted;
-            border-width: 2px;
+            border-color: #C7E8CA;
+            border-style: solid;
+            border-width: 0px;
         }
 
         a button:hover {
@@ -142,6 +140,26 @@
             font-size: 16px;
         }
 
+        .create-button {
+            background-color: #C7E8CA;
+            color: #5D9C59;
+            cursor: pointer;
+            font-size: 15px;
+            font-family: 'Esteban', serif;
+            margin: 0 10px;
+            padding: 10px 10px;
+            border-radius: 10px;
+            font-weight: bold;
+            border-color: #DF2E38;
+            border-style: dotted;
+            border-width: 2px;
+        }
+
+        .create-button:hover {
+            background-color: #5D9C59;
+            color: #FFFDFA;
+        }
+
     </style>
     {% block lights %}
     {% endblock %}
@@ -163,12 +181,11 @@
     <div class="main content">
 
             <h1 class="h1-main">Your created games</h1>
-            <a href="/new-game/"><button>New game</button></a>
+            <a href="/new-game/"><button class="create-button">New game</button></a>
             <div class="games-container">
                 {% for game in game_data %}
                     {% if game.date >= today %}
                         <div class="result-item">
-                            <!-- Game Number: {{ game.game_number }} -->
                             Group: {{ game.group_name }} | Event: {{ game.event_name }} | Date: {{ game.date }} | Price limit: {{ game.price_limit }}
                             <ul class="hidden" style="display: none;">
                                 {% for pair in game.pairs %}
@@ -186,45 +203,44 @@
     
     <div class="section">
         <div class="section-container">
-            <h1 class="h1">Your created events:</h1>
+            <h1 class="h1">Your created events</h1>
             <ul>
                 {% for event in events %}
-                    <li>{{ event.name }} | {{ event.date }} | {{ event.description }} | {{ event.organizer }}</li>
-                    <a href="/edit-event/{{ event.id }}/">Edit</a>
-                    <a href="/delete-event/{{ event.id }}/">Delete</a>
+                    <li>{{ event.name }} | {{ event.description }} | {{ event.organizer }}</li>
+                    <a href="/edit-event/{{ event.id }}/"><button>Edit</button></a>
+                    <a href="/delete-event/{{ event.id }}/"><button>Delete</button></a>
                 {% endfor %}
             </ul>
-            
-            <a href="/add-event/"><button>Add event</button></a>
+            <a href="/add-event/"><button class="create-button">Add Event</button></a>
         </div>
     
         <div class="section-container">
-            <h1 class="h1">Your created groups:</h1>
+            <h1 class="h1">Your created groups</h1>
             <ul>
                 {% for group in groups %}
-                    <li>{{ group.name }} | {{ group.exchange_date }} | {{ group.price_limit }} | {{ group.creator }}</li>
-                    <a href="/edit-group/{{ group.id }}/">Edit</a>
-                    <a href="/delete-group/{{ group.id }}/">Delete</a>
+                    <li>{{ group.name }} | {{ group.price_limit }} | {{ group.creator }}</li>
+                    <a href="/edit-group/{{ group.id }}/"><button>Edit</button></a>
+                    <a href="/delete-group/{{ group.id }}/"><button>Delete</button></a>
                     <ul>
                         {% for participant in group.participants.all %}
                             <li>{{ participant.name }} | {{ participant.email }} | {{ participant.wishlist }}</li>
                         {% endfor %}
                     </ul>
                 {% endfor %}
+                <a href="/add-group/"><button class="create-button">Add Group</button></a>
             </ul>
-            <a href="/add-group/"><button>Add group</button></a>
         </div>
 
         <div class="section-container">
-            <h1 class="h1">Your created players:</h1>
+            <h1 class="h1">Your created players</h1>
             <ul>
                 {% for person in players %}
                     <li>{{ person.name }} | {{ person.email }} | {{ person.wishlist }}</li>
-                    <a href="/edit-player/{{ person.id }}/">Edit</a>
-                    <a href="/delete-player/{{ person.id }}/">Delete</a>
+                    <a href="/edit-player/{{ person.id }}/"><button>Edit</button></a>
+                    <a href="/delete-player/{{ person.id }}/"><button>Delete</button></a>
                 {% endfor %}
             </ul>
-            <a href="/add-player/"><button>Add player</button></a>
+            <a href="/add-player/"><button class="create-button">Add Player</button></a>
         </div>
     </div>
 </div>
@@ -255,7 +271,7 @@
 <footer>
     <div class="footer-container">
         <p>Created by - <a class="author-link" href="https://github.com/mj0d3k?tab=repositories" target="_blank">mj0d3k</a></p>
-        <p class="mail-help">Get help: mj0d3k.py@gmail.com</p>
+        <p class="mail-help">Support: mj0d3k.py@gmail.com</p>
     </div>
 </footer>
 {% endblock %}

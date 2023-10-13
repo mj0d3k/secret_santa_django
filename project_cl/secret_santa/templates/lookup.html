@@ -1,6 +1,61 @@
 {% extends "base.html" %}
 
 {% block content %}
+<style>
+        body {
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            font-size: 20px;
+        }
+
+        h1 {
+            color: #DF2E38;
+        }
+
+        form {
+            background-color: #DDF7E3;
+            color: #DF2E38;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-weight: bold;
+            border-style: dotted;
+            border-color: #5D9C59;
+            max-width: 500px;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #5D9C59;
+            font-size: 20px;
+        }
+
+        button[type="submit"] {
+            background-color: #5D9C59;
+            color: #FFFDFA;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 20px;
+            font-family: 'Esteban', serif;
+        }
+
+        button[type="button"]:hover,
+        button[type="submit"]:hover {
+            background-color: #DF2E38;
+            color: #DDF7E3;
+        }
+
+</style>
 <body>
     <h1>Email Lookup</h1>
     <form method="post">

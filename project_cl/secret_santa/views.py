@@ -478,9 +478,8 @@ class GameView(View):
                 recipient_list = [giver.email]
                 send_mail(subject, message, email_from, recipient_list)
 
-            # return redirect('base')
             return redirect('success')
-        
+
         else:
             return HttpResponse("An error occurred. Please try again")
 
@@ -510,25 +509,28 @@ class MyGiftPairsView(View):
 
 class LookupView(View):
     """
-    View for looking up gift pairs for given email.
+    View for looking up gift pairs for a given email.
 
     Methods:
         - get(self, request): Handles GET requests and renders the lookup.html template.
         - post(self, request): Handles POST requests and processes the email data.
     """
-    def get(self, requst):
+    def get(self, request):
         form = EmailLookupForm()
-        return render(requst, 'lookup.html', {'form': form})
+        return render(request, 'lookup.html', {'form': form})
 
     def post(self, request):
         today = date.today()
         form = EmailLookupForm(request.POST)
+        participant = None  # Define participant with a default value
+
         if form.is_valid():
             user_email = form.cleaned_data['email']
-            try:
-                participant = Participant.objects.get(email=user_email)
+            participants = Participant.objects.filter(email=user_email)
+            if participants.exists():
+                participant = participants.first()  # Get the first matching participant
                 gift_pairs = GiftPair.objects.filter(giver=participant)
-            except participant.DoesNotExist:
+            else:
                 gift_pairs = []
 
             return render(request, 'lookup_result.html', {'gift_pairs': gift_pairs, 'participant': participant, 'today': today})

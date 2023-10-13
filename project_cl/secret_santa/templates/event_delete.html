@@ -1,13 +1,30 @@
 {% extends "base.html" %}
 
 {% block content %}
+<style>
+    body {
+        text-align: center;
+        margin: 0;
+        padding: 0;
+    }
 
+    h1 {
+        color: #DF2E38;
+    }
+    
+    .info {
+        color: #5D9C59;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+</style>
 <head>
     <title>Confirmation</title>
 </head>
 <body>
     <h1>Confirm Deletion</h1>
-    <p>Are you sure you want to delete "{{ event.name }}" and groups related with this event?</p>
+    <p class="info">Are you sure you want to delete "{{ event.name }}" and groups related with this event?</p>
     <form method="post">
         {% csrf_token %}
         <input type="submit" value="Yes">

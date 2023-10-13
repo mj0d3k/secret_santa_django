@@ -1,7 +1,42 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>My Gift Pairs</h2>
+<style>
+    body {
+        text-align: center;
+        margin: 0;
+        padding: 0;
+    }
+
+    h1 {
+        color: #DF2E38;
+    }
+
+    .results-info {
+        background-color: #DDF7E3;
+        border-color: #DF2E38;
+        color: black;
+        border-radius: 10px;
+        border-style: dotted;
+        border-width: 2px;
+        max-width: 800px;
+        margin: 20px auto;
+        text-align: center;
+        font-size: 18px;
+    }
+
+    .results-info ul {
+        margin-top: 25px;
+    }
+
+    .results-info li {
+        display: inline;
+        margin-right: 10px;
+    }
+    
+</style>
+<h1>My Gift Pairs</h1>
+<div class="results-info">
 <ul>
     {% for gift_pair in gift_pairs %}
         {% if gift_pair.date >= today %}
@@ -9,10 +44,11 @@
             Event: {{ gift_pair.event.name }}
             Date: {{ gift_pair.date }}
             Receiver: {{ gift_pair.receiver.name }}
-            wishlist: {{ gift_pair.receiver.wishlist }}
+            wishlist: {{ gift_pair.receiver.wishlist }}<br>
         </li>
         {% endif %}
     {% endfor %}
 </ul>
+</div> 
 
 {% endblock %}

@@ -1,7 +1,44 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+<style>
+    body {
+        text-align: center;
+        margin: 0;
+        padding: 0;
+    }
+
+    h1 {
+        color: #DF2E38;
+    }
+
+
+    .results-info {
+        background-color: #DDF7E3;
+        border-color: #DF2E38;
+        color: black;
+        border-radius: 10px;
+        border-style: dotted;
+        border-width: 2px;
+        max-width: 700px;
+        margin: 20px auto;
+        text-align: center;
+        font-size: 18px;
+    }
+
+    .results-info ul {
+        margin-top: 25px;
+    }
+
+    .results-info li {
+        display: inline;
+        margin-right: 10px;
+    }
+
+</style>
 <h1>Results for {{ participant.email }}</h1>
+<div class="results-info">
 <ul>
     {% for gift_pair in gift_pairs %}
         {% if gift_pair.date >= today %}
@@ -9,11 +46,12 @@
             Event: {{ gift_pair.event.name }}
             Date: {{ gift_pair.date }}
             Receiver: {{ gift_pair.receiver.name }}
-            Wishlist: {{ gift_pair.receiver.wishlist }}
+            Wishlist: {{ gift_pair.receiver.wishlist }}<br>
         </li>
         {% endif %}
     {% empty %}
         <li>No gift pairs found.</li>
     {% endfor %}
 </ul>
+</div>
 {% endblock %}

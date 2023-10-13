@@ -1,7 +1,45 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Delete Account</h2>
+<style>
+    body {
+        text-align: center;
+        margin: 0;
+        padding: 0;
+    }
+
+    h1 {
+        color: #DF2E38;
+    }
+
+    label {
+        display: block;
+        margin-top: 10px;
+        color: #5D9C59;
+        font-size: 20px;
+    }
+
+    button[type="submit"] {
+        background-color: #5D9C59;
+        color: #FFFDFA;
+        border: none;
+        border-radius: 10px;
+        padding: 10px 20px;
+        cursor: pointer;
+        margin-top: 20px;
+        font-size: 20px;
+        font-family: 'Esteban', serif;
+    }
+
+    button[type="button"]:hover,
+    button[type="submit"]:hover {
+        background-color: #DF2E38;
+        color: #DDF7E3;
+    }
+
+
+</style>
+<h1>Delete Account</h1>
 <p>Are you sure you want to delete your account? This action cannot be undone.</p>
 <form method="post">
     {% csrf_token %}

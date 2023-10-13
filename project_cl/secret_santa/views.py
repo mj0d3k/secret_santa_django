@@ -486,7 +486,7 @@ class GameView(View):
 
 class MyGiftPairsView(View):
     """
-    View for displaying gift pairs for logged user.
+    View for displaying gift pairs for the logged user.
 
     Methods:
         - get(self, request): Handles GET requests and renders the my_gift_pairs.html template.
@@ -495,10 +495,11 @@ class MyGiftPairsView(View):
         today = date.today()
         user_email = request.user.email
 
-        try:
-            participant = Participant.objects.get(email=user_email)
+        participant = Participant.objects.filter(email=user_email).first()
+
+        if participant is not None:
             gift_pairs = GiftPair.objects.filter(giver=participant)
-        except Participant.DoesNotExist:
+        else:
             gift_pairs = []
 
         if not gift_pairs:
@@ -522,13 +523,13 @@ class LookupView(View):
     def post(self, request):
         today = date.today()
         form = EmailLookupForm(request.POST)
-        participant = None  # Define participant with a default value
+        participant = None
 
         if form.is_valid():
             user_email = form.cleaned_data['email']
             participants = Participant.objects.filter(email=user_email)
             if participants.exists():
-                participant = participants.first()  # Get the first matching participant
+                participant = participants.first()
                 gift_pairs = GiftPair.objects.filter(giver=participant)
             else:
                 gift_pairs = []

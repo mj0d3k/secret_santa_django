@@ -65,7 +65,6 @@ class QuickGameView(View):
 
             secret_santa(participants, max_price, currency, date)
 
-            # return HttpResponse("All emails have been successfully sent! Enjoy your `Secret Santa` game!") # succes page with back btn
             return redirect('success')
         else:
             return HttpResponse("error: Invalid form data")

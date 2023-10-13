@@ -82,7 +82,7 @@ class Group(models.Model):
     name = models.CharField(max_length=64)
     creator = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     participants = models.ManyToManyField(Participant)
-    price_limit = models.DecimalField(max_digits=10, decimal_places=2)
+    price_limit = models.DecimalField(max_digits=10, decimal_places=2, null=False)
     currency = models.CharField(
         max_length=3,
         choices=CURRENCY_CHOICES,

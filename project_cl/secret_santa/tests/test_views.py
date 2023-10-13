@@ -50,7 +50,7 @@ class LoggedUserViewTest(TestCase):
 
         response = self.client.get(reverse('base'))
 
-        self.assertContains(response, 'Games created by me')
+        self.assertContains(response, 'Your created games')
 
 
 class QuickGameViewTests(TestCase):
@@ -285,15 +285,127 @@ class EventTests(TestCase):
         self.assertEqual(response.status_code, 302) 
 
 
-## GROUP SECTION ###
+# GROUP SECTION ###
 
-## TO DO ###
 
-## PLAYER SECTION ###
+class GroupViewTests(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
 
-## TO DO ###
+    def test_add_group_view_for_authenticated_user(self):
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.get(reverse('add-group'))
+        self.assertEqual(response.status_code, 200)
 
-## functions from views.py ###
+    def test_add_group_form_submission(self):
+        self.client.login(username='testuser', password='testpassword', price_limit=100.00)
+        data = {
+            'name': 'Test Group',
+            'creator': self.user.id,
+            'participants': [
+                ('A', 'a@example.com'),
+                ('B', 'b@example.com'),
+                ('C', 'c@example.com')
+            ],
+            'price_limit': '100.00',
+            'currency': 'PLN'
+        }
+        response = self.client.post(reverse('add-group'), data)
+        self.assertEqual(response.status_code, 200)
+
+    def test_edit_group_view_for_authenticated_user(self):
+        group = Group.objects.create(name='Test Group', creator=self.user, price_limit=100.00)
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.get(reverse('edit-group', args=[group.id]))
+        self.assertEqual(response.status_code, 200)
+
+    def test_edit_group_form_submission(self):
+        group = Group.objects.create(name='Test Group', creator=self.user, price_limit=100.00)
+        self.client.login(username='testuser', password='testpassword')
+        data = {
+            'name': 'Updated Group',
+            'creator': self.user.id,
+            'participants': [
+                ('A', 'a@example.com'),
+                ('B', 'b@example.com'),
+                ('C', 'c@example.com')
+            ],
+            'price_limit': '100.00',
+            'currency': 'PLN'
+        }
+        response = self.client.post(reverse('edit-group', args=[group.id]), data)
+        self.assertEqual(response.status_code, 200)
+
+    def test_delete_group_view_for_authenticated_user(self):
+        group = Group.objects.create(name='Test Group', creator=self.user, price_limit=100.00)
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.get(reverse('delete-group', args=[group.id]))
+        self.assertEqual(response.status_code, 200)
+
+    def test_delete_group_form_submission(self):
+        group = Group.objects.create(name='Test Group', creator=self.user, price_limit=100.00)
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.post(reverse('delete-group', args=[group.id]))
+        self.assertEqual(response.status_code, 302)
+
+# PLAYER SECTION ###
+
+
+class PlayerViewTests(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(username='testuser', password='testpassword')
+
+    def test_add_player_view_for_authenticated_user(self):
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.get(reverse('add-player'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_add_player_form_submission(self):
+        self.client.login(username='testuser', password='testpassword')
+        data = {
+            'first_name': 'Test',
+            'last_name': 'Player',
+            'email': 'test@example.com',
+            'creator': self.user.id,
+            'wishist': 'something'
+        }
+        response = self.client.post(reverse('add-player'), data, follow=True)  # Follow redirects
+        self.assertEqual(response.status_code, 200)
+
+    def test_edit_player_view_for_authenticated_user(self):
+        player = Participant.objects.create(first_name='Test', last_name='Player', email='test@example.com', creator=self.user)
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.get(reverse('edit-player', args=[player.id]))
+        self.assertEqual(response.status_code, 200)
+
+    def test_edit_player_form_submission(self):
+        player = Participant.objects.create(first_name='Test', last_name='Player', email='test@example.com', creator=self.user)
+        self.client.login(username='testuser', password='testpassword')
+        data = {
+            'first_name': 'Updated',
+            'last_name': 'Player',
+            'email': 'updated@example.com',
+            'creator': self.user.id,
+            'wishist': 'something',
+        }
+        response = self.client.post(reverse('edit-player', args=[player.id]), data, follow=True)
+        self.assertEqual(response.status_code, 200)
+
+    def test_delete_player_view_for_authenticated_user(self):
+        player = Participant.objects.create(first_name='Test', last_name='Player', email='test@example.com', creator=self.user)
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.get(reverse('delete-player', args=[player.id]))
+        self.assertEqual(response.status_code, 200)
+
+    def test_delete_player_form_submission(self):
+        player = Participant.objects.create(first_name='Test', last_name='Player', email='test@example.com', creator=self.user)
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.post(reverse('delete-player', args=[player.id]), follow=True)
+        self.assertEqual(response.status_code, 200)
+
+# functions from views.py ###
 
 class RegisterViewTests(TestCase):
     def test_register_view_available(self):

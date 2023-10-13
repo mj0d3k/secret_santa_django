@@ -538,25 +538,3 @@ class LookupView(View):
 
 def success_view(request):
     return render(request, 'success.html')
-
-
-
-
-########### TO DO ############
-
-# MUST DO:
-# tests for Event and Player + tests clean up and docu
-# python anywhere BUT POSTGRES IS NOT AVALIABLE IN FREE OPTION?? -> FIND ANOTHER SOLUTION
-
-
-# MUST BUT NOT FIRST PRIO:
-# ability to load cvs
-# custom messages
-# PSWRD reset 
-
-
-# NOT NECESSERY:
-# load screen when playing game
-# reset password
-# is model group even necessery? i can add more data fields to game form - but it is not very important
-# what about people who want to check their games, but it was quick game and it is not saved in db? maybe model for quick game in db will solve it

@@ -1,5 +1,6 @@
 # email data
 .env
+.todo
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

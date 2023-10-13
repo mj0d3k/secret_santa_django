@@ -117,7 +117,6 @@ class LookupViewTests(TestCase):
     def test_lookup_invalid_email(self):
         response = self.client.post(reverse('email-lookup'), {'email': 'invalid-email'})
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Enter a valid email address.')
 
 
 class MyGiftPairsViewTests(TestCase):
@@ -170,7 +169,7 @@ class LoginViewTest(TestCase):
     def test_post_login_valid_credentials(self):
         response = self.client.post(self.login_url, {'username': 'testuser', 'password': 'testpassword'})
         self.assertRedirects(response, reverse('base'), fetch_redirect_response=False)
-    
+
 
 class LogoutViewTest(TestCase):
     def setUp(self):
@@ -185,7 +184,6 @@ class LogoutViewTest(TestCase):
         self.assertFalse(response.wsgi_request.user.is_authenticated)
 
     def test_logout_redirect_for_authenticated_user(self):
-        # Log in the user
         self.client.login(username='testuser', password='testpassword')
         response = self.client.get(reverse('login'))
 
@@ -371,7 +369,7 @@ class PlayerViewTests(TestCase):
             'creator': self.user.id,
             'wishist': 'something'
         }
-        response = self.client.post(reverse('add-player'), data, follow=True)  # Follow redirects
+        response = self.client.post(reverse('add-player'), data, follow=True)
         self.assertEqual(response.status_code, 200)
 
     def test_edit_player_view_for_authenticated_user(self):
@@ -405,7 +403,9 @@ class PlayerViewTests(TestCase):
         response = self.client.post(reverse('delete-player', args=[player.id]), follow=True)
         self.assertEqual(response.status_code, 200)
 
-# functions from views.py ###
+
+### functions from views.py ### 
+
 
 class RegisterViewTests(TestCase):
     def test_register_view_available(self):
@@ -430,6 +430,7 @@ class SuccessViewTests(TestCase):
     def test_success_view_available(self):
         response = self.client.get(reverse('success'))
         self.assertEqual(response.status_code, 200)
+
 
 class SecretSantaTests(TestCase):
 

@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'secret_santa',
+    'project_cl.secret_santa',
 ]
 
 MIDDLEWARE = [

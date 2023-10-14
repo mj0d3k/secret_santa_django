@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 from decouple import config
+import dj_database_url
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,12 +24,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--t9c-kj0d#c6xw=$m3x=1)1(j-rh-+(bkcrx1*e27a_t@037^h'
+# SECRET_KEY = 'django-insecure--t9c-kj0d#c6xw=$m3x=1)1(j-rh-+(bkcrx1*e27a_t@037^h'
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
+DEBUG = os.environ.get('DEBUG', "False").lower() == "true"
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
 
 
 # Application definition
@@ -76,6 +81,7 @@ WSGI_APPLICATION = 'project_cl.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
         'HOST': '127.0.0.1',
@@ -85,6 +91,9 @@ DATABASES = {
         'PASSWORD': 'coderslab',
     }
 }
+
+database_url = os.environ.get("DATABASE_URL")
+DATABASES["default"] = dj_database_url.parse("database_url0")
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

@@ -15,8 +15,6 @@ from django.contrib.auth.views import PasswordChangeView
 from django.views.generic.edit import DeleteView
 from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
 
 
 ### MAIN VIEW AND ITS' OPTIONS SECTION ###
@@ -204,7 +202,6 @@ class LoggedUserView(View):
 ### EVENT SECTION ###
 
 
-@method_decorator(login_required, name='dispatch')
 class AddEventView(View):
     """
     View for adding new events.
@@ -279,7 +276,6 @@ class DeleteEventView(View):
 ### GROUP SECTION ###
 
 
-@method_decorator(login_required, name='dispatch')
 class AddGroupView(View):
     """
     View for adding new groups.

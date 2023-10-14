@@ -32,5 +32,6 @@ stack-data==0.6.2
 tomli==2.0.1
 # traitlets==5.10.1
 traitlets==5.9.0
-typing_extensions==4.8.0
+# typing_extensions==4.8.0
+typing_extensions==4.7.1
 wcwidth==0.2.6

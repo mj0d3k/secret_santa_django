@@ -1,5 +1,5 @@
 .vscode/
-
+.build.sh
 # email data
 .env
 .todo.txt

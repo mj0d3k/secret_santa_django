@@ -1,0 +1,20 @@
+databases:
+  - name: poject_cl
+    databaseName: secret-santa-postgres-render
+    user: coderslab
+
+services:
+  - type: web
+    name: poject_cl
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn poject_cl.wsgi:application"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: poject_cl
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4

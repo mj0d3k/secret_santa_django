@@ -1,5 +1,7 @@
 .vscode/
 .build.sh
+.render.yaml
+
 # email data
 .env
 .todo.txt
